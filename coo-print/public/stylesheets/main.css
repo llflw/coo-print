@@ -1,0 +1,38 @@
+
+html,
+body {
+  height: 100%;
+  background-color: #eee;
+
+}
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: middle;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.jumbotron {
+	margin-bottom: 0px;
+	min-height:100%;
+	max-width:900px;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+}
+
+.btn-lg {
+	padding:30px 300px;
+	-webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+	margin-top:40px;
+}
