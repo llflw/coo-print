@@ -4,10 +4,13 @@ $(function () {
         url: 'upload',
         dataType: 'json',
         add: function (e, data) {
-            var progressBar = $('<div class="progress"></div>');            
-            progressBar.appendTo('#files');
-            progressBar.append($('<div class="progress-bar progress-bar-success"></div>').text(data.files[0].name));
-        	data.context = progressBar;
+        	$('#main_div').css('display', 'none');
+        	$('#fileupload_div').css('display', 'block');
+        	
+        	data.context = $('<div class="progress"> \
+        			<div class="progress-bar progress-bar-success"> \
+        			<span style="margin-left:20px;">'+data.files[0].name+'</span></div> \
+        			<div class="progress-indicator">123</div></div>').appendTo('#files');
         	data.submit();
         },
         done: function (e, data) {
@@ -24,6 +27,7 @@ $(function () {
                         'width',
                         progress + '%'
                 );	
+            	$(this).find('.progress-indicator').text(progress + '%');
             });
 
 
