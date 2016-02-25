@@ -5,7 +5,7 @@ $(function () {
         dataType: 'json',
         add: function (e, data) {
         	$('#main_div').css('display', 'none');
-        	$('#fileupload_div').css('display', 'block');
+        	$('#fileupload_div').css('display', 'initial');
         	
         	data.context = $('<div class="progress"> \
         			<div class="progress-bar progress-bar-success"> \
@@ -18,6 +18,7 @@ $(function () {
             $.each(data.result.files, function (index, file) {
                 $('<p/>').text(file.name).appendTo('#files');
             });\*/
+        	$('#gotoShoppingBtn').css('visibility','visible');
         },
         
         progress: function (e, data) {

@@ -8,13 +8,12 @@ import play.api.libs.json._
 class Application extends Controller {
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."));
-    //Ok("Test");
+    Ok(views.html.index());
   }
   
   
-  def main = Action {
-    Ok(views.html.main("Your new application is ready.")(Html("<h1>hihihi</h1>")))
+  def shopping = Action {
+    Ok(views.html.shopping());
   }
   
   def upload = Action(parse.multipartFormData) { request =>
