@@ -1,42 +1,298 @@
 @main("CooPrint") {
+    <div class="container" style="padding-bottom:48px;margin-top:-10px;">
     
-    <div class="container">
-    
-    <div class="row" style="margin-top:60px;">
+    <div class="row" style="margin-top:0px;">
 
         <div class="col-md-9">
             <div class="row">
-            <div class="col-md-4" ><div class="shopping-card"></div></div>
-            <div class="col-md-4" ><div class="shopping-card"></div></div>
-            <div class="col-md-4" ><div class="shopping-card"></div></div>
+            <div class="col-md-4" ><div class="shopping-card shopping-card-active">
+            <p class="card-title">文件预览与打印设置</p>
+            <p class="card-desc">添加打印文件、选择材料、修改打印设置，预览价格</p>
+            </div></div>
+            <div class="col-md-4" ><div class="shopping-card" >
+            <p class="card-title">完善地址与联系人信息</p>
+            <p class="card-desc">添加您希望我们邮寄的地址和联系人信息</p>
+            </div></div>
+            <div class="col-md-4" ><div class="shopping-card">
+            <p class="card-title">支付下单与开票信息</p>
+            <p class="card-desc">支持网银、支付宝、微信支付，可开具增值税发票</p>
+            </div></div>
             </div>
             <div class="row">
-            <div class="col-md-4" ><span class="caret"></span></div>
-            <div class="col-md-4" >2</div>
-            <div class="col-md-4" >3</div>
+            <div class="col-md-4" ><div class="arrow-down"></div></div>
+            <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
+            <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
             </div>
             
-            <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;">
+        <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;">
 
             <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;">abc.STL</span><button type="button" class="close" aria-label="Close" style="margin-right:10px;"><span aria-hidden="true">&times;</span></button></div></div></div>
              <div class="row">
-                <div class="col-md-6 " >abc.STL</div>
-                <div class="col-md-6 " ></div>
+                <div class="col-md-8 ">【白色光敏树脂打印（￥177.7）+喷砂处理（免费）】   × 1件</div>
+                <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥177.7</div></div>
                 </div>
             
             <div class="row">
-            <div class="col-md-8 ">abc</div> 
-            <div class="col-md-4 ">123</div> 
+            <div class="col-md-6 ">
+            
+            <table style="width:100%;margin-left:10px;">
+            
+            <tr><td style="width:20%;height:40px;"><span>数量</span>
+            </td>
+            <td style="width:40%"><span>1</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+            </td></tr>
+            
+                        <tr><td style="width:20%;height:40px;"><span>材料</span>
+            </td>
+            <td style="width:40%"><span>光敏树脂</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+            
+                              <tr><td style="width:20%;height:40px;"><span>颜色</span>
+            </td>
+            <td style="width:40%"><span>白色</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+      
+            </table>
+      
+            </div> 
+            <div class="col-md-6 "><img src='@routes.Assets.versioned("images/s.png")' style="display:block;margin-left:auto;margin-right:auto;"></div> 
+            </div>
+            
+            
+            <div class="row" style="margin-top:20px;">
+            <div class="col-md-6 "><span style="margin-left:10px;">高级设置 </span><a href="javascript:void(0);" onclick="$(this).parent().find('table').toggle(2); $(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></a>
+            
+            
+            <table style="width:100%;margin-left:10px;display:none;">
+            
+            <tr><td style="width:20%;height:40px;"><span>数量</span>
+            </td>
+            <td style="width:40%"><span>1</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+            </td></tr>
+            
+                        <tr><td style="width:20%;height:40px;"><span>材料</span>
+            </td>
+            <td style="width:40%"><span>光敏树脂</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+            
+                              <tr><td style="width:20%;height:40px;"><span>颜色</span>
+            </td>
+            <td style="width:40%"><span>白色</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+      
+            </table>
+            
+            </div>
+            <div class="col-md-6 ">
+            <table style="width:100%"><tr><td style="width:25%;height:60px;">实体体积</td>
+            <td>17,766<span style="margin-left:10px">mm3</span></td>
+            <td><span style="">文件详情 </span><a href="javascript:void(0);" onclick="$('#t_1').toggle(2);$(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td></tr>
+            <tr><td></td><td colspan="2"><p>* 请确认零件体积是否正确。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td>
+            </tr></table>
+            <table style="width:100%;display:none;" id="t_1"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">117.2 x 71.9 x 50.0 mm</td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div></td></tr>
+<tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：150×100×60 mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
+            <tr><td>最小壁厚</td><td colspan="2">2</td>
+            <tr><td></td><td colspan="2"><p>* 最小壁厚建议不小于2mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
+            </table>
+
             </div>
             
             </div>
+            
+            <div class="row" ><div class="col-md-12" ><div class="shopping-line"></div></div></div>
+            
+            </div>
+        
+        <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;">
+
+            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;">abc.STL</span><button type="button" class="close" aria-label="Close" style="margin-right:10px;"><span aria-hidden="true">&times;</span></button></div></div></div>
+             <div class="row">
+                <div class="col-md-8 ">【白色光敏树脂打印（￥177.7）+喷砂处理（免费）】   × 1件</div>
+                <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥177.7</div></div>
+                </div>
+            
+            <div class="row">
+            <div class="col-md-6 ">
+            
+            <table style="width:100%;margin-left:10px;">
+            
+            <tr><td style="width:20%;height:40px;"><span>数量</span>
+            </td>
+            <td style="width:40%"><span>1</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+            </td></tr>
+            
+                        <tr><td style="width:20%;height:40px;"><span>材料</span>
+            </td>
+            <td style="width:40%"><span>光敏树脂</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+            
+                              <tr><td style="width:20%;height:40px;"><span>颜色</span>
+            </td>
+            <td style="width:40%"><span>白色</span>
+            </td>
+            <td><div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
+      
+            </table>
+
+                
+                
+                
+                
+            </div> 
+            <div class="col-md-6 "><img src='@routes.Assets.versioned("images/s.png")' style="display:block;margin-left:auto;margin-right:auto;"></div> 
+            </div>
+            
+            
+            <div class="row" style="margin-top:20px;">
+            <div class="col-md-6 "><span style="margin-left:10px;">高级设置 </span><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
+            <div class="col-md-6 "><span>实体体积</span><span style="margin-left:20px">17,766</span><span style="margin-left:20px">mm3</span><span style="margin-left:70px;">文件详情 </span><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
+            </div>
+            
+            <div class="row" ><div class="col-md-12" ><div class="shopping-line"></div></div></div>
+            
+            </div>
+     
+        
         </div>
 
-        <div class="col-md-3" style="background-color:#0fd;height:500px">
+        <div class="col-md-3" style="background-color:#fff;height:500px">
           
         </div>
 </div>
       
       
     </div>
+
 }

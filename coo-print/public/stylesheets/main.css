@@ -8,8 +8,8 @@ body {
 .site-wrapper {
   display: table;
   width: 100%;
-  height: 100%; /* For at least Firefox */
-  min-height: 100%;
+  height: 90%; /* For at least Firefox */
+  min-height: 90%;
 
 }
 .site-wrapper-inner {
@@ -39,23 +39,5 @@ body {
 
 .btn-lg-ex {
 	padding:30px 300px;
-}
-
-.col-padding {
-	padding:2px 2px;
-}
-
-.shopping-card {
-	height:180px;
-	background-color: #0080c0;
-	margin-left:-10px;
-	margin-right: -10px;
-}
-
-.shopping-line {
-	border-bottom:1px solid rgba(86,61,124,.2);
-	height:30px;
-	margin-bottom:20px;
-	margin-top:10px;
 }
 
