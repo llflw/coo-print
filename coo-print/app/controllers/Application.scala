@@ -33,7 +33,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
         val session = request.session
         
         if (session.get("c_id").isEmpty) {
-          result.withSession(session + ("c_id", "C1-00001")) 
+          result.withSession(session + ("c_id", "C1-00002")) 
         }
         result
       }
@@ -44,8 +44,13 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
   import dbConfig.driver.api._
   
-  def index = CPAction {
-    Ok( views.html.index())
+  def index = CPAction { request =>
+    val result = Ok( views.html.index())
+    if (request.session.get("c_id").isEmpty) {
+      result.withSession("c_id" -> "C1-00001");
+    }
+    
+    result
   }
   
   
