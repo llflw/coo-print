@@ -5,7 +5,7 @@
     @play20.welcome(message)
 
 }******@
-@main("CooPrint") {
+@main {
       
         <div class="site-wrapper">
   <div class="site-wrapper-inner">
@@ -15,10 +15,10 @@
 <div class="container" id="main_div">
         <h1><span style="font-family:Segoe Script">CooPrint 3D</span><span style="font-family:STXingkai">打印服务</span></h1>
         <p>做靠谱的3D打印服务，成为您的专属打印机！</p>
-        <p><span class="btn btn-primary btn-lg btn-lg-ex fileinput-button">
+        <p><span class="btn btn-primary btn-lg btn-lg-1 btn-lg-2 fileinput-button">
         <i class="glyphicon glyphicon-upload" aria-hidden="true"></i>
         <span> 上传您的3D设计文件</span>
-        <input id="fileupload" type="file" name="files" multiple></input></span></p>
+        <input id="fileupload" type="file" name="files[]" multiple></input></span></p>
         <p>今日下单，预计4个工作日后将零件寄出！ </p>
         <div style="width:500px;text-align:left;margin-left:auto;margin-right:auto;margin-top:90px;">
         <ul>
@@ -39,7 +39,7 @@
     <div class="row">
   <div class="col-md-4"></div>
   <div class="col-md-4"></div>
-  <div class="col-md-4"><a id="gotoShoppingBtn" href="/shopping" class="btn btn-primary btn-lg" style="visibility:hidden;">下一步 >></a></div>
+  <div class="col-md-4"><a id="gotoShoppingBtn" href="/shopping" class="btn btn-primary btn-lg btn-lg-1" style="visibility:hidden;">下一步 >></a></div>
 </div>
   </div>
 </div>

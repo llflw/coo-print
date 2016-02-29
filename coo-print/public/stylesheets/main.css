@@ -30,14 +30,16 @@ body {
 	text-align:center;
 }
 
-.btn-lg {
-    padding:20px 60px;
+.btn-lg-1 {
+    padding:30px 80px;
     -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
           box-shadow: inset 0 0 100px rgba(0,0,0,.5);
     margin-top:40px;
+    margin-bottom:40px;
 }
 
-.btn-lg-ex {
+
+.btn-lg-2 {
 	padding:30px 300px;
 }
 

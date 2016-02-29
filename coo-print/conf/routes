@@ -7,6 +7,10 @@ GET     /                           controllers.Application.index
 
 GET     /shopping                   controllers.Application.shopping
 
+POST    /login                      controllers.Application.login
+
+GET     /logout                      controllers.Application.logout
+
 POST    /upload                     controllers.Application.upload
 
 # Map static resources from the /public folder to the /assets URL path

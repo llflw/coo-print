@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(content: Html)
 
 <!DOCTYPE html>
 <html lang="zh">
@@ -7,14 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>@title</title>
-
+    <title>CoolPrint</title>
+    <link rel="icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+    
     <!-- Bootstrap -->
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/jquery.fileupload.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/shopping.css")">
-    <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/login.css")">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,15 +38,56 @@
             <li><p class="navbar-text"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> service@@cooprint.cn </p></li>
 			<li><a href="#"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> 在线客服  </a></li>
                 </ul>
-            <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">注册</a></li>
-            <li><a href="#">登录</a></li>
+            <ul class="nav navbar-nav navbar-right navbar-login">
+            <li><a href="#" data-toggle="modal" data-target="#modal_login">登录</a></li>
+            <li><a href="#"> 注册</a></li>
+          </ul>
+             <ul class="nav navbar-nav navbar-right navbar-logout hidden">
+            <li><p class="navbar-text">欢迎</p></li>
+            <li><a href="/logout"> 登出</a></li>
           </ul>
           </div>
           </div>
 
  </nav>
  
+<div class="modal" id="modal_login" tabindex="-1">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modal-label">用户登录</h4>
+            </div>
+
+            <div class="modal-body">
+                      <form class="form-signin" id="login_form">
+        <h2 class="form-signin-heading">请登录</h2>
+        <p class="error hidden"></p>
+        <label for="usr_id" class="sr-only">用户名</label>
+        <input type="text" id="user_id" name="user_id" class="form-control" placeholder="用户名/邮箱/手机号" required autofocus>
+        <label for="passwd" class="sr-only">密码</label>
+        <input type="password" id="passwd" name="passwd" class="form-control" placeholder="密码" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember" name="remeber"> 记住我
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+      </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close-modal" data-dismiss="modal">关闭</button>
+                <!-- button type="button" class="btn btn-primary">登录</button -->
+            </div>
+            
+        </div>
+    </div>
+</div>
 
       @content
 

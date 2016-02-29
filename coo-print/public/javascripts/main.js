@@ -10,15 +10,20 @@ $(function () {
         	data.context = $('<div class="progress"> \
         			<div class="progress-bar progress-bar-success"> \
         			<span style="margin-left:20px;">'+data.files[0].name+'</span></div> \
-        			<div class="progress-indicator">123</div></div>').appendTo('#files');
+        			<div class="progress-indicator"></div></div>').appendTo('#files');
         	data.submit();
         },
         done: function (e, data) {
-        	/*
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo('#files');
-            });\*/
-        	$('#gotoShoppingBtn').css('visibility','visible');
+       	
+        	var shoppingBtn = $('#gotoShoppingBtn');
+        	if (shoppingBtn.length > 0) {
+        		shoppingBtn.css('visibility','visible');
+        	} else {
+        		$('#files').hide('slow',  function() {
+        		    $( this ).children().remove();
+        		  });
+        	}
+        	
         },
         
         progress: function (e, data) {
@@ -33,14 +38,32 @@ $(function () {
 
 
         },
-        /*
-        progressall: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#progress .progress-bar').css(
-                'width',
-                progress + '%'
-            );
-        }*/
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    
+    $('#login_form').submit(function(event) {
+    	event.preventDefault();
+    	var that = this;
+    	$.ajax({
+            type: "POST",
+            url: "/login",
+            data: $(that).serialize(), 
+            success: function(data)
+            {
+            	if (data.status == 'ok') {
+            		$(that).find(".error").toggleClass('hidden', true);
+                	$('#modal_login').find('.close-modal').click();
+                	$('.navbar-login').hide();
+                	$('.navbar-logout').find('.navbar-text').text(data.msg);
+                	$('.navbar-logout').toggleClass('hidden');	
+            	} else {
+            		$(that).find(".error").text(data.msg);
+            		$(that).find(".error").toggleClass('hidden', false);
+            	}
+            	
+                
+            }
+        });
+   
+	});
 });
