@@ -33,7 +33,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
         val session = request.session
         
         if (session.get("c_id").isEmpty) {
-          result.withSession(session + ("c_id", "abc")) 
+          result.withSession(session + ("c_id", "C1-00001")) 
         }
         result
       }
