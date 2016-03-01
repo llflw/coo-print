@@ -1,7 +1,5 @@
 @import scala.collection.mutable.ListBuffer
-@import models.Tables.MMaterialRow
-@(orderItemList: ListBuffer[OrderItem])(materialList: List[MMaterialRow])
-
+@(orderItemList: ListBuffer[OrderItem])
 @main{
     <div class="container" style="padding-bottom:48px;margin-top:-10px;">
     
@@ -28,7 +26,7 @@
             <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
             </div>
             @for(i <- 1 to orderItemList.length) {
-                @orderItem(i, orderItemList(i-1))(materialList)
+                @orderItem(i, orderItemList(i-1))
             }
  
      <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;">

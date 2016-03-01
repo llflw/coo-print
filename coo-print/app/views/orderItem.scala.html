@@ -1,5 +1,5 @@
 @import models.Tables.MMaterialRow
-@(idx: Int, orderItem: OrderItem)(materialList: List[MMaterialRow])
+@(idx: Int, orderItem: OrderItem)
         <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;" id="div_@idx">
 
             <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;">@{orderItem.fileName}</span><button type="button" class="close" aria-label="Close" style="margin-right:10px;"><span aria-hidden="true">&times;</span></button></div></div></div>
@@ -28,6 +28,7 @@
     }
   </ul>
 </div>
+
             </td></tr>
             
                         <tr><td style="width:20%;height:40px;"><span>材料</span>
@@ -40,9 +41,10 @@
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu_material_@idx">
-   @for(m <- materialList) {
-      <li><a href="javascript:void(0);" onclick="$('#item_material_@idx').text('@m.materialName')">@m.materialName</a></li>
-    }
+  @import play.api.Play.current
+@for(m <- play.api.cache.Cache.getAs[List[MMaterialRow]]("t_m_material").get ) {
+    <li><a href="javascript:void(0);" onclick="$('#item_material_@idx').text('@m.materialName')">@m.materialName</a></li>
+}
   </ul>
 </div>
             

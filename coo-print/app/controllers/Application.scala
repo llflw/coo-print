@@ -70,13 +70,11 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       cache.set(KEY_OF_TABLE_MMATERIAL, materials)
       materials
     }
-    
-    
    
         
     val c_id = request.session.get(KEY_OF_CLIENT_ID).get
     val orderItemList = cache.get[ListBuffer[OrderItem]](c_id + SUBKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
-    Ok(views.html.shopping(orderItemList)(cachedMaterials))
+    Ok(views.html.shopping(orderItemList))
   }
   
   /**
