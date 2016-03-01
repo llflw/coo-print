@@ -1,8 +1,8 @@
 drop table if exists p_user;
 create table p_user
 (
-  client_id character varying(10) not null,
-  user_id character varying(10),
+  client_id character varying(8) not null,
+  user_id character varying(32),
   user_name character varying(32),
   passwd character varying(32),
   email character varying(64),
@@ -62,102 +62,102 @@ create table p_order_detail
 );
 
 
+drop table if exists m_properties;
+create table m_properties
+(
+ prop_type character varying(10) not null,
+ prop_name character varying(32) not null,
+ prop_price numeric not null,
+ constraint m_properties_pk primary key (prop_type, prop_name)
+);
+insert into m_properties values('material',  'PLA塑料', 15);
+insert into m_properties values('material',  '光敏树脂', 15);
+insert into m_properties values('material',  '彩色/柔性光敏树脂', 15);
+insert into m_properties values('material',  '尼龙', 15);
+insert into m_properties values('material',  '尼龙+玻纤', 15);
+insert into m_properties values('material',  '砂岩', 15);
+insert into m_properties values('material',  '不锈钢', 15);
+insert into m_properties values('color', '原色', 11);
+insert into m_properties values('color', '蓝色', 11);
+insert into m_properties values('color', '红色', 11);
+insert into m_properties values('color', '白色', 11);
+insert into m_properties values('color', '透明', 11);
+insert into m_properties values('color', '彩色/柔性', 11);
+insert into m_properties values('color', '淡黄色', 11);
+insert into m_properties values('color', '全彩', 11);
+insert into m_properties values('finish',  '无', 10);
+insert into m_properties values('finish',  '喷砂', 10);
+insert into m_properties values('finish',  '打磨', 10);
+insert into m_properties values('finish',  '上色', 10);
+insert into m_properties values('finish',  '喷镀', 10);
+insert into m_properties values('finish',  '抛光', 10);
+insert into m_properties values('finish',  '电镀', 10);
+insert into m_properties values('layer',  '0.02', 1);
+insert into m_properties values('layer',  '0.025', 2);
+insert into m_properties values('layer',  '0.05', 3);
+insert into m_properties values('layer',  '0.1', 3);
+insert into m_properties values('layer',  '0.2', 3);
+insert into m_properties values('layer',  '0.3', 3);
+insert into m_properties values('fill',  '15', 1);
+insert into m_properties values('fill',  '20', 2);
+insert into m_properties values('fill',  '30', 3);
+insert into m_properties values('fill',  '100', 4);
+insert into m_properties values('zoom',  '50', 1);
+insert into m_properties values('zoom',  '100', 2);
+insert into m_properties values('zoom',  '200', 3);
+
+
+
+
 drop table if exists m_material;
 create table m_material
 (
  material_id integer not null,
  material_name character varying(32) not null,
  tech character varying(32) not null,
- max_able_1 integer not null,
- max_able_2 integer not null,
- max_able_3 integer not null,
+ v_color character varying(32) not null,
+ v_finish character varying(32) not null,
+ v_layer character varying(32) not null,
+ v_fill character varying(32) not null,
+ v_zoom character varying(32) not null, 
  constraint m_material_pk primary key (material_id)
 );
-insert into m_material values(1, 'PLA塑料', 'FDM', 230, 150, 140);
-insert into m_material values(2, '光敏树脂', 'SLA', 800, 600, 400);
-insert into m_material values(3, '彩色/柔性光敏树脂', 'Polyjet', 250, 250, 200);
-insert into m_material values(4, '尼龙', 'SLS', 700, 580, 380);
-insert into m_material values(5, '尼龙+玻纤', 'SLS', 700, 580, 380);
-insert into m_material values(6, '砂岩', '3DP', 381, 254, 203);
-insert into m_material values(7, '不锈钢', 'SLM', 280, 250, 250);
+insert into m_material values(1, 'PLA塑料', 'FDM', '原色,蓝色,红色,白色','无,上色', '0.3,0.2,','15,20,30','100,50,200');
+insert into m_material values(2, '光敏树脂', 'SLA', '白色,透明','喷砂,无,打磨,上色,电镀', '0.1,0.05,0.025','100','100,50,200');
+insert into m_material values(3, '彩色/柔性光敏树脂', 'Polyjet', '彩色/柔性','喷砂,无,打磨,上色,电镀', '0.05,0.025','100','100,50,200');
+insert into m_material values(4, '尼龙', 'SLS', '白色','喷砂,无,打磨,上色','0.1','100','100,50,200');
+insert into m_material values(5, '尼龙+玻纤', 'SLS', '淡黄色','喷砂,无,打磨,上色', '0.1','100','100,50,200');
+insert into m_material values(6, '砂岩', '3DP', '全彩','无,打磨', '0.1','100','100,50,200');
+insert into m_material values(7, '不锈钢', 'SLM','-','喷砂,无,打磨,抛光,电镀','0.1,0.02','100','100,50,200');
 
 
-drop table if exists m_color;
-create table m_color
+drop table if exists m_max_available;
+create table m_max_available
 (
- color_id integer not null,
- color_name character varying(32) not null,
- constraint m_color_pk primary key (color_id)
-);
-insert into m_color values(1,'原色');
-insert into m_color values(2,'蓝色');
-insert into m_color values(3,'红色');
-insert into m_color values(4,'白色');
-insert into m_color values(5,'透明');
-insert into m_color values(6,'彩色/柔性');
-insert into m_color values(7,'淡黄色');
-insert into m_color values(8,'全彩');
-
-
-
-drop table if exists m_finish;
-create table m_finish
-(
- finish_id integer not null,
- finish_name character varying(32) not null,
- constraint m_finish_pk primary key (finish_id)
+  max_id integer not null,
+  material_name character varying(32) not null,
+  max_x integer not null,
+  max_y integer not null,
+  max_z integer not null,
+  constraint m_max_availabe_pk primary key (max_id)
 );
 
-insert into m_finish values(1, '无');
-insert into m_finish values(2, '喷砂');
-insert into m_finish values(3, '打磨');
-insert into m_finish values(4, '上色');
-insert into m_finish values(5, '喷镀');
-insert into m_finish values(6, '抛光');
-insert into m_finish values(7, '电镀');
+insert into m_max_available values(1, 'PLA塑料',230, 150, 140);
+insert into m_max_available values(2, '光敏树脂',800, 600, 400);
+insert into m_max_available values(3, '光敏树脂',298, 203, 185);
+insert into m_max_available values(4, '彩色/柔性光敏树脂',250, 250, 200);
+insert into m_max_available values(5, '尼龙',700, 580, 380);
+insert into m_max_available values(6, '尼龙+玻纤',700, 580, 380);
+insert into m_max_available values(7, '砂岩',381, 254, 203);
+insert into m_max_available values(8, '不锈钢',280, 250, 250);
 
 
-drop table if exists m_layer;
-create table m_layer
-(
- layer_id integer not null,
- layer_name character varying(32) not null,
- constraint m_layer_pk primary key (layer_id)
-);
-
-insert into m_layer values(1, '0.02 mm');
-insert into m_layer values(2, '0.025 mm');
-insert into m_layer values(3, '0.05 mm');
-insert into m_layer values(4, '0.1 mm');
-insert into m_layer values(5, '0.2 mm');
-insert into m_layer values(6, '0.3 mm');
-
-
-drop table if exists m_fill;
-create table m_fill
-(
- fill_id integer not null,
- fill_name character varying(32) not null,
- constraint m_fill_pk primary key (fill_id)
-);
-
-insert into m_fill values(1, '15%');
-insert into m_fill values(2, '20%');
-insert into m_fill values(3, '30%');
-insert into m_fill values(4, '100%');
-
-drop table if exists m_zoom;
-create table m_zoom
-(
- zoom_id integer not null,
- zoom_name character varying(32) not null,
- constraint m_zoom_pk primary key (zoom_id)
-);
-
-
-insert into m_zoom values(1, '50%');
-insert into m_zoom values(2, '100%');
-insert into m_zoom values(3, '200%');
+drop sequence if exists seq_client_id;
+CREATE SEQUENCE seq_client_id
+   INCREMENT 1
+   START 1
+   MINVALUE 1
+   MAXVALUE 99999;
 
 
 commit;

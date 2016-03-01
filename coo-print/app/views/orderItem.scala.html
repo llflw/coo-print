@@ -1,7 +1,8 @@
-@(fileName: String)(idx: String)
+@import models.Tables.MMaterialRow
+@(idx: Int, orderItem: OrderItem)(materialList: List[MMaterialRow])
         <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;" id="div_@idx">
 
-            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;">@fileName</span><button type="button" class="close" aria-label="Close" style="margin-right:10px;"><span aria-hidden="true">&times;</span></button></div></div></div>
+            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;">@{orderItem.fileName}</span><button type="button" class="close" aria-label="Close" style="margin-right:10px;"><span aria-hidden="true">&times;</span></button></div></div></div>
              <div class="row">
                 <div class="col-md-8 ">【白色光敏树脂打印（￥177.7）+喷砂处理（免费）】   × 1件</div>
                 <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥177.7</div></div>
@@ -14,16 +15,16 @@
             
             <tr><td style="width:20%;height:40px;"><span>数量</span>
             </td>
-            <td style="width:40%"><span id="item_quantity">1</span>
+            <td style="width:40%"><span id="item_quantity_@idx">@{orderItem.quantity}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_quantity" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_quantity_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_quantity">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_quantity_@idx">
   @for(i <- 1 to 8){
-    <li><a href="#" onclick="$('#item_quantity').text('@i')">@i</a></li> 
+    <li><a href="javascript:void(0);" onclick="$('#item_quantity_@idx').text('@i')">@i</a></li> 
     }
   </ul>
 </div>
@@ -31,34 +32,30 @@
             
                         <tr><td style="width:20%;height:40px;"><span>材料</span>
             </td>
-            <td style="width:40%"><span>光敏树脂</span>
+            <td style="width:40%"><span id="item_material_@idx">@{orderItem.material}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_material" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_material_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_material">
-    <li><a href="#">PLA塑料</a></li>
-    <li><a href="#">普通光敏树脂   </a></li>
-    <li><a href="#">高精度光敏树脂</a></li>
-    <li><a href="#">尼龙</a></li>
-    <li><a href="#">尼龙+玻纤</a></li>
-    <li><a href="#">砂岩</a></li>
-    <li><a href="#">无锈钢</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_material_@idx">
+   @for(m <- materialList) {
+      <li><a href="javascript:void(0);" onclick="$('#item_material_@idx').text('@m.materialName')">@m.materialName</a></li>
+    }
   </ul>
 </div>
             
                               <tr><td style="width:20%;height:40px;"><span>颜色</span>
             </td>
-            <td style="width:40%"><span>白色</span>
+            <td style="width:40%"><span id="item_color_@idx">@{orderItem.color}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_color" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_color_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_color">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_color_@idx">
     <li><a href="#">Action</a></li>
     <li><a href="#">Another action</a></li>
     <li><a href="#">Something else here</a></li>
@@ -75,21 +72,21 @@
             
             
             <div class="row" style="margin-top:20px;">
-            <div class="col-md-6 "><span style="margin-left:10px;">高级设置 </span><a href="#" onclick="$(this).parent().find('table').toggle(); $(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></a>
+            <div class="col-md-6 "><span style="margin-left:10px;">高级设置 </span><a href="javascript:void(0);" onclick="$(this).parent().find('table').toggle(); $(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></a>
             
             
             <table style="width:100%;margin-left:10px;display:none;margin-top:10px;">
             
             <tr><td style="width:20%;height:40px;"><span>后处理</span>
             </td>
-            <td style="width:40%"><span>喷砂</span>
+            <td style="width:40%"><span>@{orderItem.finish}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_finish" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_finish_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_finish">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_finish_@idx">
     <li><a href="#">Action</a></li>
     <li><a href="#">Another action</a></li>
     <li><a href="#">Something else here</a></li>
@@ -101,14 +98,14 @@
             
                         <tr><td style="width:20%;height:40px;"><span>层厚</span>
             </td>
-            <td style="width:40%"><span>0.2 mm</span>
+            <td style="width:40%"><span>@{orderItem.layer}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_thick" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_thick_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_thick">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_thick_@idx">
     <li><a href="#">Action</a></li>
     <li><a href="#">Another action</a></li>
     <li><a href="#">Something else here</a></li>
@@ -119,14 +116,14 @@
             
                               <tr><td style="width:20%;height:40px;"><span>填充率</span>
             </td>
-            <td style="width:40%"><span>15%</span>
+            <td style="width:40%"><span>@{orderItem.fill}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_filling" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_fill_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_filling">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_fill_@idx">
     <li><a href="#">Action</a></li>
     <li><a href="#">Another action</a></li>
     <li><a href="#">Something else here</a></li>
@@ -137,14 +134,14 @@
 
 <tr><td style="width:20%;height:40px;"><span>尺寸缩放</span>
             </td>
-            <td style="width:40%"><span>原始尺寸</span>
+            <td style="width:40%"><span>@{orderItem.zoom}</span>
             </td>
             <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_zoom" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_zoom_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_zoom">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_zoom_@idx">
     <li><a href="#">Action</a></li>
     <li><a href="#">Another action</a></li>
     <li><a href="#">Something else here</a></li>
@@ -159,11 +156,11 @@
             <div class="col-md-6 ">
             <table style="width:100%"><tr><td style="width:25%;height:60px;">实体体积</td>
             <td>17,766<span style="margin-left:10px">mm3</span></td>
-            <td><span style="">文件详情 </span><a href="javascript:void(0);" onclick="$('#t_1').toggle();$(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td></tr>
+            <td><span style="">文件详情 </span><a href="javascript:void(0);" onclick="$('#t_volume_@idx').toggle();$(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td></tr>
             <tr><td></td><td colspan="2"><p>* 请确认零件体积是否正确。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td>
             </tr></table>
-            <table style="width:100%;display:none;" id="t_1"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">117.2 x 71.9 x 50.0 mm</td>
-            <td><div class="dropdown">
+            <table style="width:100%;display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">117.2 x 71.9 x 50.0 mm</td>
+            <td><!-- div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     
     <span class="caret"></span>
@@ -175,8 +172,8 @@
     <li role="separator" class="divider"></li>
     <li><a href="#">Separated link</a></li>
   </ul>
-</div></td></tr>
-<tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：150×100×60 mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
+</div --></td></tr>
+<tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：@{orderItem.xyz}。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
             <tr><td>最小壁厚</td><td colspan="2">2</td>
             <tr><td></td><td colspan="2"><p>* 最小壁厚建议不小于2mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
             </table>

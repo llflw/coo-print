@@ -14,120 +14,30 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(MColor.schema, MFill.schema, MFinish.schema, MLayer.schema, MMaterial.schema, MZoom.schema, PAddress.schema, POrder.schema, POrderDetail.schema, PUser.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(MMaterial.schema, MMaxAvailable.schema, MProperties.schema, PAddress.schema, POrder.schema, POrderDetail.schema, PUser.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
-
-  /** Entity class storing rows of table MColor
-   *  @param colorId Database column color_id SqlType(int4), PrimaryKey
-   *  @param colorName Database column color_name SqlType(varchar), Length(32,true) */
-  case class MColorRow(colorId: Int, colorName: String)
-  /** GetResult implicit for fetching MColorRow objects using plain SQL queries */
-  implicit def GetResultMColorRow(implicit e0: GR[Int], e1: GR[String]): GR[MColorRow] = GR{
-    prs => import prs._
-    MColorRow.tupled((<<[Int], <<[String]))
-  }
-  /** Table description of table m_color. Objects of this class serve as prototypes for rows in queries. */
-  class MColor(_tableTag: Tag) extends Table[MColorRow](_tableTag, "m_color") {
-    def * = (colorId, colorName) <> (MColorRow.tupled, MColorRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(colorId), Rep.Some(colorName)).shaped.<>({r=>import r._; _1.map(_=> MColorRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column color_id SqlType(int4), PrimaryKey */
-    val colorId: Rep[Int] = column[Int]("color_id", O.PrimaryKey)
-    /** Database column color_name SqlType(varchar), Length(32,true) */
-    val colorName: Rep[String] = column[String]("color_name", O.Length(32,varying=true))
-  }
-  /** Collection-like TableQuery object for table MColor */
-  lazy val MColor = new TableQuery(tag => new MColor(tag))
-
-  /** Entity class storing rows of table MFill
-   *  @param fillId Database column fill_id SqlType(int4), PrimaryKey
-   *  @param fillName Database column fill_name SqlType(varchar), Length(32,true) */
-  case class MFillRow(fillId: Int, fillName: String)
-  /** GetResult implicit for fetching MFillRow objects using plain SQL queries */
-  implicit def GetResultMFillRow(implicit e0: GR[Int], e1: GR[String]): GR[MFillRow] = GR{
-    prs => import prs._
-    MFillRow.tupled((<<[Int], <<[String]))
-  }
-  /** Table description of table m_fill. Objects of this class serve as prototypes for rows in queries. */
-  class MFill(_tableTag: Tag) extends Table[MFillRow](_tableTag, "m_fill") {
-    def * = (fillId, fillName) <> (MFillRow.tupled, MFillRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(fillId), Rep.Some(fillName)).shaped.<>({r=>import r._; _1.map(_=> MFillRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column fill_id SqlType(int4), PrimaryKey */
-    val fillId: Rep[Int] = column[Int]("fill_id", O.PrimaryKey)
-    /** Database column fill_name SqlType(varchar), Length(32,true) */
-    val fillName: Rep[String] = column[String]("fill_name", O.Length(32,varying=true))
-  }
-  /** Collection-like TableQuery object for table MFill */
-  lazy val MFill = new TableQuery(tag => new MFill(tag))
-
-  /** Entity class storing rows of table MFinish
-   *  @param finishId Database column finish_id SqlType(int4), PrimaryKey
-   *  @param finishName Database column finish_name SqlType(varchar), Length(32,true) */
-  case class MFinishRow(finishId: Int, finishName: String)
-  /** GetResult implicit for fetching MFinishRow objects using plain SQL queries */
-  implicit def GetResultMFinishRow(implicit e0: GR[Int], e1: GR[String]): GR[MFinishRow] = GR{
-    prs => import prs._
-    MFinishRow.tupled((<<[Int], <<[String]))
-  }
-  /** Table description of table m_finish. Objects of this class serve as prototypes for rows in queries. */
-  class MFinish(_tableTag: Tag) extends Table[MFinishRow](_tableTag, "m_finish") {
-    def * = (finishId, finishName) <> (MFinishRow.tupled, MFinishRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(finishId), Rep.Some(finishName)).shaped.<>({r=>import r._; _1.map(_=> MFinishRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column finish_id SqlType(int4), PrimaryKey */
-    val finishId: Rep[Int] = column[Int]("finish_id", O.PrimaryKey)
-    /** Database column finish_name SqlType(varchar), Length(32,true) */
-    val finishName: Rep[String] = column[String]("finish_name", O.Length(32,varying=true))
-  }
-  /** Collection-like TableQuery object for table MFinish */
-  lazy val MFinish = new TableQuery(tag => new MFinish(tag))
-
-  /** Entity class storing rows of table MLayer
-   *  @param layerId Database column layer_id SqlType(int4), PrimaryKey
-   *  @param layerName Database column layer_name SqlType(varchar), Length(32,true) */
-  case class MLayerRow(layerId: Int, layerName: String)
-  /** GetResult implicit for fetching MLayerRow objects using plain SQL queries */
-  implicit def GetResultMLayerRow(implicit e0: GR[Int], e1: GR[String]): GR[MLayerRow] = GR{
-    prs => import prs._
-    MLayerRow.tupled((<<[Int], <<[String]))
-  }
-  /** Table description of table m_layer. Objects of this class serve as prototypes for rows in queries. */
-  class MLayer(_tableTag: Tag) extends Table[MLayerRow](_tableTag, "m_layer") {
-    def * = (layerId, layerName) <> (MLayerRow.tupled, MLayerRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(layerId), Rep.Some(layerName)).shaped.<>({r=>import r._; _1.map(_=> MLayerRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column layer_id SqlType(int4), PrimaryKey */
-    val layerId: Rep[Int] = column[Int]("layer_id", O.PrimaryKey)
-    /** Database column layer_name SqlType(varchar), Length(32,true) */
-    val layerName: Rep[String] = column[String]("layer_name", O.Length(32,varying=true))
-  }
-  /** Collection-like TableQuery object for table MLayer */
-  lazy val MLayer = new TableQuery(tag => new MLayer(tag))
 
   /** Entity class storing rows of table MMaterial
    *  @param materialId Database column material_id SqlType(int4), PrimaryKey
    *  @param materialName Database column material_name SqlType(varchar), Length(32,true)
    *  @param tech Database column tech SqlType(varchar), Length(32,true)
-   *  @param maxAble1 Database column max_able_1 SqlType(int4)
-   *  @param maxAble2 Database column max_able_2 SqlType(int4)
-   *  @param maxAble3 Database column max_able_3 SqlType(int4) */
-  case class MMaterialRow(materialId: Int, materialName: String, tech: String, maxAble1: Int, maxAble2: Int, maxAble3: Int)
+   *  @param vColor Database column v_color SqlType(varchar), Length(32,true)
+   *  @param vFinish Database column v_finish SqlType(varchar), Length(32,true)
+   *  @param vLayer Database column v_layer SqlType(varchar), Length(32,true)
+   *  @param vFill Database column v_fill SqlType(varchar), Length(32,true)
+   *  @param vZoom Database column v_zoom SqlType(varchar), Length(32,true) */
+  case class MMaterialRow(materialId: Int, materialName: String, tech: String, vColor: String, vFinish: String, vLayer: String, vFill: String, vZoom: String)
   /** GetResult implicit for fetching MMaterialRow objects using plain SQL queries */
   implicit def GetResultMMaterialRow(implicit e0: GR[Int], e1: GR[String]): GR[MMaterialRow] = GR{
     prs => import prs._
-    MMaterialRow.tupled((<<[Int], <<[String], <<[String], <<[Int], <<[Int], <<[Int]))
+    MMaterialRow.tupled((<<[Int], <<[String], <<[String], <<[String], <<[String], <<[String], <<[String], <<[String]))
   }
   /** Table description of table m_material. Objects of this class serve as prototypes for rows in queries. */
   class MMaterial(_tableTag: Tag) extends Table[MMaterialRow](_tableTag, "m_material") {
-    def * = (materialId, materialName, tech, maxAble1, maxAble2, maxAble3) <> (MMaterialRow.tupled, MMaterialRow.unapply)
+    def * = (materialId, materialName, tech, vColor, vFinish, vLayer, vFill, vZoom) <> (MMaterialRow.tupled, MMaterialRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(materialId), Rep.Some(materialName), Rep.Some(tech), Rep.Some(maxAble1), Rep.Some(maxAble2), Rep.Some(maxAble3)).shaped.<>({r=>import r._; _1.map(_=> MMaterialRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(materialId), Rep.Some(materialName), Rep.Some(tech), Rep.Some(vColor), Rep.Some(vFinish), Rep.Some(vLayer), Rep.Some(vFill), Rep.Some(vZoom)).shaped.<>({r=>import r._; _1.map(_=> MMaterialRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column material_id SqlType(int4), PrimaryKey */
     val materialId: Rep[Int] = column[Int]("material_id", O.PrimaryKey)
@@ -135,38 +45,80 @@ trait Tables {
     val materialName: Rep[String] = column[String]("material_name", O.Length(32,varying=true))
     /** Database column tech SqlType(varchar), Length(32,true) */
     val tech: Rep[String] = column[String]("tech", O.Length(32,varying=true))
-    /** Database column max_able_1 SqlType(int4) */
-    val maxAble1: Rep[Int] = column[Int]("max_able_1")
-    /** Database column max_able_2 SqlType(int4) */
-    val maxAble2: Rep[Int] = column[Int]("max_able_2")
-    /** Database column max_able_3 SqlType(int4) */
-    val maxAble3: Rep[Int] = column[Int]("max_able_3")
+    /** Database column v_color SqlType(varchar), Length(32,true) */
+    val vColor: Rep[String] = column[String]("v_color", O.Length(32,varying=true))
+    /** Database column v_finish SqlType(varchar), Length(32,true) */
+    val vFinish: Rep[String] = column[String]("v_finish", O.Length(32,varying=true))
+    /** Database column v_layer SqlType(varchar), Length(32,true) */
+    val vLayer: Rep[String] = column[String]("v_layer", O.Length(32,varying=true))
+    /** Database column v_fill SqlType(varchar), Length(32,true) */
+    val vFill: Rep[String] = column[String]("v_fill", O.Length(32,varying=true))
+    /** Database column v_zoom SqlType(varchar), Length(32,true) */
+    val vZoom: Rep[String] = column[String]("v_zoom", O.Length(32,varying=true))
   }
   /** Collection-like TableQuery object for table MMaterial */
   lazy val MMaterial = new TableQuery(tag => new MMaterial(tag))
 
-  /** Entity class storing rows of table MZoom
-   *  @param zoomId Database column zoom_id SqlType(int4), PrimaryKey
-   *  @param zoomName Database column zoom_name SqlType(varchar), Length(32,true) */
-  case class MZoomRow(zoomId: Int, zoomName: String)
-  /** GetResult implicit for fetching MZoomRow objects using plain SQL queries */
-  implicit def GetResultMZoomRow(implicit e0: GR[Int], e1: GR[String]): GR[MZoomRow] = GR{
+  /** Entity class storing rows of table MMaxAvailable
+   *  @param maxId Database column max_id SqlType(int4), PrimaryKey
+   *  @param materialName Database column material_name SqlType(varchar), Length(32,true)
+   *  @param maxX Database column max_x SqlType(int4)
+   *  @param maxY Database column max_y SqlType(int4)
+   *  @param maxZ Database column max_z SqlType(int4) */
+  case class MMaxAvailableRow(maxId: Int, materialName: String, maxX: Int, maxY: Int, maxZ: Int)
+  /** GetResult implicit for fetching MMaxAvailableRow objects using plain SQL queries */
+  implicit def GetResultMMaxAvailableRow(implicit e0: GR[Int], e1: GR[String]): GR[MMaxAvailableRow] = GR{
     prs => import prs._
-    MZoomRow.tupled((<<[Int], <<[String]))
+    MMaxAvailableRow.tupled((<<[Int], <<[String], <<[Int], <<[Int], <<[Int]))
   }
-  /** Table description of table m_zoom. Objects of this class serve as prototypes for rows in queries. */
-  class MZoom(_tableTag: Tag) extends Table[MZoomRow](_tableTag, "m_zoom") {
-    def * = (zoomId, zoomName) <> (MZoomRow.tupled, MZoomRow.unapply)
+  /** Table description of table m_max_available. Objects of this class serve as prototypes for rows in queries. */
+  class MMaxAvailable(_tableTag: Tag) extends Table[MMaxAvailableRow](_tableTag, "m_max_available") {
+    def * = (maxId, materialName, maxX, maxY, maxZ) <> (MMaxAvailableRow.tupled, MMaxAvailableRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(zoomId), Rep.Some(zoomName)).shaped.<>({r=>import r._; _1.map(_=> MZoomRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(maxId), Rep.Some(materialName), Rep.Some(maxX), Rep.Some(maxY), Rep.Some(maxZ)).shaped.<>({r=>import r._; _1.map(_=> MMaxAvailableRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
-    /** Database column zoom_id SqlType(int4), PrimaryKey */
-    val zoomId: Rep[Int] = column[Int]("zoom_id", O.PrimaryKey)
-    /** Database column zoom_name SqlType(varchar), Length(32,true) */
-    val zoomName: Rep[String] = column[String]("zoom_name", O.Length(32,varying=true))
+    /** Database column max_id SqlType(int4), PrimaryKey */
+    val maxId: Rep[Int] = column[Int]("max_id", O.PrimaryKey)
+    /** Database column material_name SqlType(varchar), Length(32,true) */
+    val materialName: Rep[String] = column[String]("material_name", O.Length(32,varying=true))
+    /** Database column max_x SqlType(int4) */
+    val maxX: Rep[Int] = column[Int]("max_x")
+    /** Database column max_y SqlType(int4) */
+    val maxY: Rep[Int] = column[Int]("max_y")
+    /** Database column max_z SqlType(int4) */
+    val maxZ: Rep[Int] = column[Int]("max_z")
   }
-  /** Collection-like TableQuery object for table MZoom */
-  lazy val MZoom = new TableQuery(tag => new MZoom(tag))
+  /** Collection-like TableQuery object for table MMaxAvailable */
+  lazy val MMaxAvailable = new TableQuery(tag => new MMaxAvailable(tag))
+
+  /** Entity class storing rows of table MProperties
+   *  @param propType Database column prop_type SqlType(varchar), Length(10,true)
+   *  @param propName Database column prop_name SqlType(varchar), Length(32,true)
+   *  @param propPrice Database column prop_price SqlType(numeric) */
+  case class MPropertiesRow(propType: String, propName: String, propPrice: scala.math.BigDecimal)
+  /** GetResult implicit for fetching MPropertiesRow objects using plain SQL queries */
+  implicit def GetResultMPropertiesRow(implicit e0: GR[String], e1: GR[scala.math.BigDecimal]): GR[MPropertiesRow] = GR{
+    prs => import prs._
+    MPropertiesRow.tupled((<<[String], <<[String], <<[scala.math.BigDecimal]))
+  }
+  /** Table description of table m_properties. Objects of this class serve as prototypes for rows in queries. */
+  class MProperties(_tableTag: Tag) extends Table[MPropertiesRow](_tableTag, "m_properties") {
+    def * = (propType, propName, propPrice) <> (MPropertiesRow.tupled, MPropertiesRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(propType), Rep.Some(propName), Rep.Some(propPrice)).shaped.<>({r=>import r._; _1.map(_=> MPropertiesRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column prop_type SqlType(varchar), Length(10,true) */
+    val propType: Rep[String] = column[String]("prop_type", O.Length(10,varying=true))
+    /** Database column prop_name SqlType(varchar), Length(32,true) */
+    val propName: Rep[String] = column[String]("prop_name", O.Length(32,varying=true))
+    /** Database column prop_price SqlType(numeric) */
+    val propPrice: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("prop_price")
+
+    /** Primary key of MProperties (database name m_properties_pk) */
+    val pk = primaryKey("m_properties_pk", (propType, propName))
+  }
+  /** Collection-like TableQuery object for table MProperties */
+  lazy val MProperties = new TableQuery(tag => new MProperties(tag))
 
   /** Entity class storing rows of table PAddress
    *  @param userId Database column user_id SqlType(varchar), Length(10,true)
@@ -310,8 +262,8 @@ trait Tables {
   lazy val POrderDetail = new TableQuery(tag => new POrderDetail(tag))
 
   /** Entity class storing rows of table PUser
-   *  @param clientId Database column client_id SqlType(varchar), PrimaryKey, Length(10,true)
-   *  @param userId Database column user_id SqlType(varchar), Length(10,true), Default(None)
+   *  @param clientId Database column client_id SqlType(varchar), PrimaryKey, Length(8,true)
+   *  @param userId Database column user_id SqlType(varchar), Length(32,true), Default(None)
    *  @param userName Database column user_name SqlType(varchar), Length(32,true), Default(None)
    *  @param passwd Database column passwd SqlType(varchar), Length(32,true), Default(None)
    *  @param email Database column email SqlType(varchar), Length(64,true), Default(None)
@@ -332,10 +284,10 @@ trait Tables {
     /** Maps whole row to an option. Useful for outer joins. */
     def ? = (Rep.Some(clientId), userId, userName, passwd, email, tel, company, other, registerDt, firstOrderDt).shaped.<>({r=>import r._; _1.map(_=> PUserRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8, _9, _10)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
-    /** Database column client_id SqlType(varchar), PrimaryKey, Length(10,true) */
-    val clientId: Rep[String] = column[String]("client_id", O.PrimaryKey, O.Length(10,varying=true))
-    /** Database column user_id SqlType(varchar), Length(10,true), Default(None) */
-    val userId: Rep[Option[String]] = column[Option[String]]("user_id", O.Length(10,varying=true), O.Default(None))
+    /** Database column client_id SqlType(varchar), PrimaryKey, Length(8,true) */
+    val clientId: Rep[String] = column[String]("client_id", O.PrimaryKey, O.Length(8,varying=true))
+    /** Database column user_id SqlType(varchar), Length(32,true), Default(None) */
+    val userId: Rep[Option[String]] = column[Option[String]]("user_id", O.Length(32,varying=true), O.Default(None))
     /** Database column user_name SqlType(varchar), Length(32,true), Default(None) */
     val userName: Rep[Option[String]] = column[Option[String]]("user_name", O.Length(32,varying=true), O.Default(None))
     /** Database column passwd SqlType(varchar), Length(32,true), Default(None) */

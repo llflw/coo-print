@@ -3,6 +3,8 @@ $(function () {
     $('#fileupload').fileupload({
         url: 'upload',
         dataType: 'json',
+        limitConcurrentUploads: 1,
+        sequentialUploads: true,
         add: function (e, data) {
         	$('#main_div').css('display', 'none');
         	$('#fileupload_div').css('display', 'initial');
