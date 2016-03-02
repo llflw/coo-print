@@ -1,0 +1,37 @@
+@import scala.collection.mutable.ListBuffer
+@import controllers.Application
+@(orderItemList: ListBuffer[OrderItem])(implicit session: Session)
+
+@shopping {
+<form id="order_items_form">
+ @for(i <- 1 to orderItemList.length) {
+     @orderItem(i, orderItemList(i-1))
+ }
+ </form>
+ 
+ <div class="modal fade" id="delConfirmModal" tabindex="-1" role="dialog" aria-labelledby="delConfirmModal">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+         <h4 class="modal-title" id="myModalLabel">请确认</h4>
+       </div>
+       <div class="modal-body">
+         确定删除[<span class="item-name"></span>]吗？
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+         <button type="button" class="btn btn-primary">删除</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
+ <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;">
+ <div id="files" class="files"></div>
+ <p><span class="btn btn-primary fileinput-button" style="margin-left:10px;margin-bottom:20px;margin-top:20px;">
+ <i class="glyphicon glyphicon-upload" aria-hidden="true"></i>
+ <span> 上传更多</span>
+ <input id="fileupload" type="file" name="files"></input></span></p>
+ </div>
+ }

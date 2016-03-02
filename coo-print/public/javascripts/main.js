@@ -92,7 +92,7 @@ $(function () {
 		var fill = parent.find("select[name=item_fill]");		
 		var layer = parent.find("select[name=item_layer]");		
 		var zoom = parent.find("select[name=item_zoom]");
-		 	
+
     	$.ajax({
     		type:"GET",
     		url:"/props/"+$(this).val(),
@@ -148,6 +148,13 @@ $(function () {
     });
     
     
+    $('select[name=item_color]').change(function(event){
+
+    	var parent = $(this).closest('.order-item');  	
+    	parent.find('.item-color').text($(this).find('option:selected').text());
+
+    });
+    
     $('select[name=item_finish]').change(function(event){
 
     	var parent = $(this).closest('.order-item');  	
@@ -155,29 +162,43 @@ $(function () {
 
     });
     
-    $('.delete-item').click(function(event) {
+    $('#delConfirmModal').on('show.bs.modal', function (event) {
+    	var target = $(event.relatedTarget)
+    	var that = $(this);
     	
-    	var orderItem = $(this).closest('.order-item');
-    	var fileName = orderItem.find('.item-name').text();
+    	var orderItem = $('#'+target.data('order-item'));
+    	var fileName = target.data('file-name');
     	
-    	$.ajax({
-    		type:"DELETE",
-    		url:"/item/"+fileName,
-    		success:function(data) {
-    	    	
-    	    	orderItem.hide('slow',function(){
-    	    		
-    	    		var oic = Number($('.order_count').text()) - 1
-    	    		$('.order_count').text(oic);
-    	    		
-    	    		var price = (Number($('.order-price').text()) - Number($(this).find('.item-total-price').text())).toFixed(2);
-    	    		$('.order-price').text(price);
-    	    		$('.total-price').text(price);
-    	    		
-    	    		
-    	    		$(this).remove();
-    	    	})
-    		}
+    	var modal = $(this);
+    	modal.find('.item-name').text(fileName);
+    	
+    	var btnPrimary = modal.find('.btn-primary');
+    	btnPrimary.off('click');
+    	btnPrimary.click(function(event) {
+        	$.ajax({
+        		type:"DELETE",
+        		url:"/item/"+fileName,
+        		success:function(data) {
+        			
+        			that.find('.btn-default').click();
+        	    	
+        	    	orderItem.hide('slow',function(){
+        	    		
+        	    		var oic = Number($('.order-count').text()) - 1
+        	    		$('.order-count').text(oic);
+        	    		
+        	    		var price = (Number($('.order-price').text()) - Number($(this).find('.item-total-price').text())).toFixed(2);
+        	    		$('.order-price').text(price);
+        	    		$('.total-price').text(price);
+        	    		
+        	    		
+        	    		$(this).remove();
+        	    	});
+        	    	
+        		}
+        	});
     	});
+    	
     });
+    
 });

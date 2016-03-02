@@ -1,6 +1,5 @@
-@import scala.collection.mutable.ListBuffer
 @import controllers.Application
-@(orderItemList: ListBuffer[OrderItem])(implicit session: Session)
+@(content:Html)(implicit session: Session)
 @main{
     <div class="container" style="padding-bottom:48px;margin-top:-10px;">
     
@@ -26,19 +25,11 @@
             <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
             <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
             </div>
-            <form id="order_items_form">
-            @for(i <- 1 to orderItemList.length) {
-                @orderItem(i, orderItemList(i-1))
-            }
-            </form>
+            
+           @content
+
  
-     <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;">
-        <div id="files" class="files"></div>
-        <p><span class="btn btn-primary fileinput-button" style="margin-left:10px;margin-bottom:20px;margin-top:20px;">
-        <i class="glyphicon glyphicon-upload" aria-hidden="true"></i>
-        <span> 上传更多</span>
-        <input id="fileupload" type="file" name="files"></input></span></p>
-        </div>
+     
         </div>
 
         <div class="col-md-3" >
@@ -56,7 +47,7 @@
           <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
           
             </div>
-            <a href="/submitOrder" class="btn btn-primary btn-lg btn-lg-1 shopping-next-btn" >下一步 >> </a>
+            <a href="#" class="btn btn-primary btn-lg btn-lg-1 shopping-next-btn" >下一步 >> </a>
 
         </div>
         </div>

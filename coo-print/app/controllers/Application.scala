@@ -66,7 +66,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   }
   
   
-  def shopping = CPAction { implicit request =>
+  def editItems = CPAction { implicit request =>
     
     val cachedMaterials = cache.getOrElse[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL){
       val materialRows : Future[Seq[MMaterialRow]] = dbConfig.db.run(MMaterial.result)
@@ -78,7 +78,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
         
     val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
     val orderItemList = cache.get[ListBuffer[OrderItem]](c_id + Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
-    Ok(views.html.shopping(orderItemList))
+    Ok(views.html.editItems(orderItemList))
   }
   
   /**

@@ -4,7 +4,9 @@
         <div class="order-item" id="orderItem_@idx">
 
             <input class="form-control" type="hidden" name="fileName" value="@{orderItem.fileName}">
-            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;" class="item-name">@{orderItem.fileName}</span><button type="button" class="close delete-item" aria-label="Close" style="margin-right:10px;" ><span aria-hidden="true">&times;</span></button></div></div></div>
+            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;" class="item-name">@{orderItem.fileName}</span>
+            <button type="button" class="close delete-item" aria-label="Close" style="margin-right:10px;" data-toggle="modal" data-target="#delConfirmModal" data-file-name="@{orderItem.fileName}" data-order-item="orderItem_@idx"><span aria-hidden="true">&times;</span></button>
+            </div></div></div>
              <div class="row">
                 <div class="col-md-8 ">【<span class="item-color">@(orderItem.color)</span><span class="item-material">@(orderItem.material)</span>打印（￥<span class="item-price">@(orderItem.price)</span>）+<span class="item-finish">@(orderItem.finish)</span>处理（免费）】   × <span class="item-quantity">@(orderItem.quantity)</span>件</div>
                 <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥<span class="item-total-price">@(orderItem.price)</span></div></div>
@@ -46,7 +48,7 @@
             <tr><td style="width:20%;height:40px;"><span>颜色</span>
             </td>
             <td style="width:40%">
-            <select class="form-control" id="item_color_@idx" name=item_color onchange="$('#s_color').text($(this).find('option:selected').text());">
+            <select class="form-control" id="item_color_@idx" name="item_color">
               @for(color <- cMaterial.vColor.split(",")) {
                 <option @if(color == orderItem.color){
              selected
