@@ -62,10 +62,122 @@ $(function () {
             		$(that).find(".error").text(data.msg);
             		$(that).find(".error").toggleClass('hidden', false);
             	}
-            	
-                
+
             }
         });
    
 	});
+    
+    $('select[name=item_material]').change(function(event){
+    	var parent = $(this).closest(".order-item");
+    	
+    	var mOpt = $(this).find('option:selected');
+    	parent.find('.item-material').text(mOpt.data('name'));
+    	parent.find('.item-price').text(mOpt.data('price'));
+    	
+    	var cnt = parent.find('select[name=item_quantity]').find('option:selected').text()
+    	var totalPrice = Number(cnt) * Number(mOpt.data('price'));
+    	parent.find('.item-total-price').text(totalPrice.toFixed(2));
+    	
+    	var orderPrice = 0;
+    	$('.item-total-price').each(function(idx, val){
+    		orderPrice += Number($(val).text());
+    	});
+    	$('.order-price').text(orderPrice.toFixed(2));
+    	$('.total-price').text(orderPrice.toFixed(2));
+    	
+    		
+		var color = parent.find("select[name=item_color]");		
+		var finish = parent.find("select[name=item_finish]");				
+		var fill = parent.find("select[name=item_fill]");		
+		var layer = parent.find("select[name=item_layer]");		
+		var zoom = parent.find("select[name=item_zoom]");
+		 	
+    	$.ajax({
+    		type:"GET",
+    		url:"/props/"+$(this).val(),
+    		success:function(data) {
+    			color.children().remove();
+    			$.each(data.color, function(i, c){
+    				if (i == 0) { $('<option selected>' + c +'</option>').appendTo(color); }
+    				else {$('<option>' + c +'</option>').appendTo(color)};
+    			})
+    			finish.children().remove();
+    			$.each(data.finish, function(i, c){
+    				$('<option>' + c +'</option>').appendTo(finish);
+    			})
+    			fill.children().remove();
+    			$.each(data.fill, function(i, c){
+    				$('<option>' + c +'</option>').appendTo(fill);
+    			})
+    			layer.children().remove();
+    			$.each(data.layer, function(i, c){
+    				$('<option>' + c +'</option>').appendTo(layer);
+    			})
+    			zoom.children().remove();
+    			$.each(data.zoom, function(i, c){
+    				$('<option>' + c +'</option>').appendTo(zoom);
+    			})
+    			
+    			parent.find('.item-color').text(color.find('option:selected').text());
+    			parent.find('.item-finish').text(finish.find('option:selected').text());
+    		}
+
+    	})
+    });
+    
+    $('select[name=item_quantity]').change(function(event){
+
+    	var parent = $(this).closest('.order-item');
+    	
+    	var cnt = $(this).find('option:selected').text();
+    	parent.find('.item-quantity').text(cnt);
+    	
+    	var price = parent.find('select[name=item_material]').find('option:selected').data('price');
+    	var totalPrice = Number(cnt) * Number(price);
+    	
+    	parent.find('.item-total-price').text(totalPrice.toFixed(2));
+    	
+    	var orderPrice = 0;
+    	$('.item-total-price').each(function(idx, val){
+    		orderPrice += Number($(val).text());
+    	});
+    	$('.order-price').text(orderPrice.toFixed(2));
+    	$('.total-price').text(orderPrice.toFixed(2));
+    	
+    });
+    
+    
+    $('select[name=item_finish]').change(function(event){
+
+    	var parent = $(this).closest('.order-item');  	
+    	parent.find('.item-finish').text($(this).find('option:selected').text());
+
+    });
+    
+    $('.delete-item').click(function(event) {
+    	
+    	var orderItem = $(this).closest('.order-item');
+    	var fileName = orderItem.find('.item-name').text();
+    	
+    	$.ajax({
+    		type:"DELETE",
+    		url:"/item/"+fileName,
+    		success:function(data) {
+    	    	
+    	    	orderItem.hide('slow',function(){
+    	    		
+    	    		var oic = Number($('.order_count').text()) - 1
+    	    		$('.order_count').text(oic);
+    	    		
+    	    		var price = (Number($('.order-price').text()) - Number($(this).find('.item-total-price').text())).toFixed(2);
+    	    		$('.order-price').text(price);
+    	    		$('.total-price').text(price);
+    	    		
+    	    		
+    	    		$(this).remove();
+    	    	})
+    		}
+    	});
+    });
 });

@@ -1,11 +1,13 @@
 @import models.Tables.MMaterialRow
+@import controllers.Application
 @(idx: Int, orderItem: OrderItem)
-        <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;" id="div_@idx">
+        <div class="order-item" id="orderItem_@idx">
 
-            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;">@{orderItem.fileName}</span><button type="button" class="close" aria-label="Close" style="margin-right:10px;"><span aria-hidden="true">&times;</span></button></div></div></div>
+            <input class="form-control" type="hidden" name="fileName" value="@{orderItem.fileName}">
+            <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;" class="item-name">@{orderItem.fileName}</span><button type="button" class="close delete-item" aria-label="Close" style="margin-right:10px;" ><span aria-hidden="true">&times;</span></button></div></div></div>
              <div class="row">
-                <div class="col-md-8 ">【白色光敏树脂打印（￥177.7）+喷砂处理（免费）】   × 1件</div>
-                <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥177.7</div></div>
+                <div class="col-md-8 ">【<span class="item-color">@(orderItem.color)</span><span class="item-material">@(orderItem.material)</span>打印（￥<span class="item-price">@(orderItem.price)</span>）+<span class="item-finish">@(orderItem.finish)</span>处理（免费）】   × <span class="item-quantity">@(orderItem.quantity)</span>件</div>
+                <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥<span class="item-total-price">@(orderItem.price)</span></div></div>
                 </div>
             
             <div class="row">
@@ -15,56 +17,44 @@
             
             <tr><td style="width:20%;height:40px;"><span>数量</span>
             </td>
-            <td style="width:40%"><span id="item_quantity_@idx">@{orderItem.quantity}</span>
+            <td style="width:40%">
+            <select class="form-control" id="item_quantity_@idx" name="item_quantity" >
+             @for(i <- 1 to 8){
+             <option value="@i" @if(i == orderItem.quantity){
+             selected
+             }>@i</option>
+             }
+            </select>
             </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_quantity_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_quantity_@idx">
-  @for(i <- 1 to 8){
-    <li><a href="javascript:void(0);" onclick="$('#item_quantity_@idx').text('@i')">@i</a></li> 
-    }
-  </ul>
-</div>
+            <td></td></tr>
+            
+            <tr><td style="width:20%;height:40px;"><span>材料</span>
+            </td>
+            <td style="width:40%">
+           <select class="form-control" id="item_material_@idx" name="item_material">
+            @import play.api.Play.current
+            @for(mr <- play.api.cache.Cache.getAs[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).get ) {
+            <option value="@mr.materialId" data-price="@mr.price" data-name="@mr.materialName" @if(mr.materialName == orderItem.material){
+             selected
+             }>@mr.materialName ￥@mr.price</option>
+            }
+            </select>
+            </td>
+            <td>
 
-            </td></tr>
-            
-                        <tr><td style="width:20%;height:40px;"><span>材料</span>
+@defining(play.api.cache.Cache.getAs[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).get.filter(xmr => xmr.materialName == orderItem.material)(0)) {cMaterial =>            
+            <tr><td style="width:20%;height:40px;"><span>颜色</span>
             </td>
-            <td style="width:40%"><span id="item_material_@idx">@{orderItem.material}</span>
+            <td style="width:40%">
+            <select class="form-control" id="item_color_@idx" name=item_color onchange="$('#s_color').text($(this).find('option:selected').text());">
+              @for(color <- cMaterial.vColor.split(",")) {
+                <option @if(color == orderItem.color){
+             selected
+             }>@color</option>
+              }
+            </select>
             </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_material_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_material_@idx">
-  @import play.api.Play.current
-@for(m <- play.api.cache.Cache.getAs[List[MMaterialRow]]("t_m_material").get ) {
-    <li><a href="javascript:void(0);" onclick="$('#item_material_@idx').text('@m.materialName')">@m.materialName</a></li>
-}
-  </ul>
-</div>
-            
-                              <tr><td style="width:20%;height:40px;"><span>颜色</span>
-            </td>
-            <td style="width:40%"><span id="item_color_@idx">@{orderItem.color}</span>
-            </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_color_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_color_@idx">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
+            <td></td></tr>
       
             </table>
       
@@ -81,105 +71,72 @@
             
             <tr><td style="width:20%;height:40px;"><span>后处理</span>
             </td>
-            <td style="width:40%"><span>@{orderItem.finish}</span>
+            <td style="width:40%">
+            <select class="form-control" id="item_finish_@idx" name="item_finish">
+            @for(finish <- cMaterial.vFinish.split(",")) {
+                <option @if(finish == orderItem.finish){
+             selected
+             }>@finish</option>
+              }
+            </select>
             </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_finish_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_finish_@idx">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div>
-            </td></tr>
+            <td></td></tr>
             
                         <tr><td style="width:20%;height:40px;"><span>层厚</span>
             </td>
-            <td style="width:40%"><span>@{orderItem.layer}</span>
+            <td style="width:40%">
+            <select class="form-control" id="item_layer_@idx" name="item_layer">
+            @for(layer <- cMaterial.vLayer.split(",")) {
+                <option @if(layer == orderItem.layer){
+             selected
+             }>@layer</option>
+              }
+            </select>
             </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_thick_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_thick_@idx">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div></td></tr>
+            <td></td></tr>
             
                               <tr><td style="width:20%;height:40px;"><span>填充率</span>
             </td>
-            <td style="width:40%"><span>@{orderItem.fill}</span>
+            <td style="width:40%">
+            <select class="form-control" id="item_fill_@idx" name="item_fill">
+            @for(fill <- cMaterial.vFill.split(",")) {
+                <option @if(fill == orderItem.fill){
+             selected
+             }>@fill</option>
+              }
+            </select>
             </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_fill_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_fill_@idx">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div></td></tr>
+            <td></td></tr>
 
-<tr><td style="width:20%;height:40px;"><span>尺寸缩放</span>
+            <tr><td style="width:20%;height:40px;"><span>尺寸缩放</span>
             </td>
-            <td style="width:40%"><span>@{orderItem.zoom}</span>
+            <td style="width:40%">
+            <select class="form-control" id="item_zoom_@idx" name="item_zoom">
+            @for(zoom <- cMaterial.vZoom.split(",")) {
+                <option @if(zoom == orderItem.zoom){
+             selected
+             }>@zoom</option>
+              }
+            </select>
             </td>
-            <td><div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu_zoom_@idx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_zoom_@idx">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div></td></tr>
+            <td></td></tr>
       
             </table>
             
             </div>
             <div class="col-md-6 ">
             <table style="width:100%"><tr><td style="width:25%;height:60px;">实体体积</td>
-            <td>17,766<span style="margin-left:10px">mm3</span></td>
+            <td>17,766<span style="margin-left:10px">mm</span></td>
             <td><span style="">文件详情 </span><a href="javascript:void(0);" onclick="$('#t_volume_@idx').toggle();$(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td></tr>
             <tr><td></td><td colspan="2"><p>* 请确认零件体积是否正确。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td>
             </tr></table>
-            <table style="width:100%;display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">117.2 x 71.9 x 50.0 mm</td>
-            <td><!-- div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">Action</a></li>
-    <li><a href="#">Another action</a></li>
-    <li><a href="#">Something else here</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">Separated link</a></li>
-  </ul>
-</div --></td></tr>
-<tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：@{orderItem.xyz}。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
-            <tr><td>最小壁厚</td><td colspan="2">2</td>
+            <table style="width:100%;display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">@{orderItem.mxyz}</td>
+            <td></td></tr>
+            <tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：230 x 150 x 140 mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
+            <tr><td>最小壁厚</td><td colspan="2">@(orderItem.mlayer)</td>
             <tr><td></td><td colspan="2"><p>* 最小壁厚建议不小于2mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
             </table>
-
+}
             </div>
             
             </div>

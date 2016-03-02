@@ -1,5 +1,6 @@
 @import scala.collection.mutable.ListBuffer
-@(orderItemList: ListBuffer[OrderItem])
+@import controllers.Application
+@(orderItemList: ListBuffer[OrderItem])(implicit session: Session)
 @main{
     <div class="container" style="padding-bottom:48px;margin-top:-10px;">
     
@@ -25,13 +26,15 @@
             <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
             <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
             </div>
+            <form id="order_items_form">
             @for(i <- 1 to orderItemList.length) {
                 @orderItem(i, orderItemList(i-1))
             }
+            </form>
  
      <div style="background-color:#fff; margin-left:-10px;margin-right:-10px;font-size:15px;">
         <div id="files" class="files"></div>
-        <p><span class="btn btn-primary fileinput-button" style="margin-left:10px;margin-bottom:20px;">
+        <p><span class="btn btn-primary fileinput-button" style="margin-left:10px;margin-bottom:20px;margin-top:20px;">
         <i class="glyphicon glyphicon-upload" aria-hidden="true"></i>
         <span> 上传更多</span>
         <input id="fileupload" type="file" name="files"></input></span></p>
@@ -42,17 +45,18 @@
         <div style="background-color:#fff;margin-left:-15px;margin-right: -15px; padding-left:10px;padding-right:10px;">
           <p style="padding-top: 40px;margin-bottom: 20px;"><img src='@routes.Assets.versioned("images/cart.png")'><span style='font-size: 24px;'> 您的购物车</span></p>
           <table style="width:100%;font-size:18px;">
-            <tr><td style="height:60px;">3D打印 （1件）</td><td>￥177.7</td></tr>
+            <tr><td style="height:60px;">3D打印 （<span class="order-count">@(session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse(0))</span>件）</td>
+            <td>￥<span class="order-price">@(session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0))</span></td></tr>
             <tr><td>后处理</td><td>免费</td></tr>
           </table>
           <div class="shopping-line"></div>
           <p style="font-size:18px;">合计金额:</p>
           <p style="font-size:14px;margin-left: 40px;">（不含税费、运费）</p>
-          <p style="font-size:24px;text-align: right;margin-top:20px;margin-bottom:20px;padding-right:20px;">￥177.7</p>
+          <p class="total-price">￥<span>@(session.get(Application.SKEY_OF_TOTAL_PRICE).getOrElse(0))</span></p>
           <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
           
             </div>
-            <a href="/shopping" class="btn btn-primary btn-lg btn-lg-1 shopping-next-btn" >下一步 >> </a>
+            <a href="/submitOrder" class="btn btn-primary btn-lg btn-lg-1 shopping-next-btn" >下一步 >> </a>
 
         </div>
         </div>

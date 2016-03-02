@@ -1,5 +1,4 @@
-@(content: Html)
-
+@(content: Html)(implicit session: Session)
 <!DOCTYPE html>
 <html lang="zh">
   <head>
@@ -38,14 +37,22 @@
             <li><p class="navbar-text"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> service@@cooprint.cn </p></li>
 			<li><a href="#"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> 在线客服  </a></li>
                 </ul>
-            <ul class="nav navbar-nav navbar-right navbar-login">
+           @if(session.get("user_name").isEmpty) {
+                <ul class="nav navbar-nav navbar-right navbar-login">
             <li><a href="#" data-toggle="modal" data-target="#modal_login">登录</a></li>
             <li><a href="#"> 注册</a></li>
           </ul>
+                     
              <ul class="nav navbar-nav navbar-right navbar-logout hidden">
-            <li><p class="navbar-text">欢迎</p></li>
+            <li><p class="navbar-text">hi, guest</p></li>
             <li><a href="/logout"> 登出</a></li>
           </ul>
+               }else {
+             <ul class="nav navbar-nav navbar-right navbar-logout">
+            <li><p class="navbar-text">hi, @(session.get("user_name").get)</p></li>
+            <li><a href="/logout"> 登出</a></li>
+          </ul>
+          }
           </div>
           </div>
 

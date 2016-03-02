@@ -115,20 +115,21 @@ create table m_material
  material_id integer not null,
  material_name character varying(32) not null,
  tech character varying(32) not null,
- v_color character varying(32) not null,
- v_finish character varying(32) not null,
- v_layer character varying(32) not null,
- v_fill character varying(32) not null,
- v_zoom character varying(32) not null, 
+ price numeric not null,
+ v_color character varying(32),
+ v_finish character varying(32),
+ v_layer character varying(32),
+ v_fill character varying(32),
+ v_zoom character varying(32), 
  constraint m_material_pk primary key (material_id)
 );
-insert into m_material values(1, 'PLA塑料', 'FDM', '原色,蓝色,红色,白色','无,上色', '0.3,0.2,','15,20,30','100,50,200');
-insert into m_material values(2, '光敏树脂', 'SLA', '白色,透明','喷砂,无,打磨,上色,电镀', '0.1,0.05,0.025','100','100,50,200');
-insert into m_material values(3, '彩色/柔性光敏树脂', 'Polyjet', '彩色/柔性','喷砂,无,打磨,上色,电镀', '0.05,0.025','100','100,50,200');
-insert into m_material values(4, '尼龙', 'SLS', '白色','喷砂,无,打磨,上色','0.1','100','100,50,200');
-insert into m_material values(5, '尼龙+玻纤', 'SLS', '淡黄色','喷砂,无,打磨,上色', '0.1','100','100,50,200');
-insert into m_material values(6, '砂岩', '3DP', '全彩','无,打磨', '0.1','100','100,50,200');
-insert into m_material values(7, '不锈钢', 'SLM','-','喷砂,无,打磨,抛光,电镀','0.1,0.02','100','100,50,200');
+insert into m_material values(1, 'PLA塑料', 'FDM', 100.1,'原色,蓝色,红色,白色','无,上色', '0.3,0.2,','15,20,30','100,50,200');
+insert into m_material values(2, '光敏树脂', 'SLA', 100.2,'白色,透明','喷砂,无,打磨,上色,电镀', '0.1,0.05,0.025','100','100,50,200');
+insert into m_material values(3, '彩色/柔性光敏树脂', 'Polyjet', 100.3,'彩色/柔性','喷砂,无,打磨,上色,电镀', '0.05,0.025','100','100,50,200');
+insert into m_material values(4, '尼龙', 'SLS', 100.4,'白色','喷砂,无,打磨,上色','0.1','100','100,50,200');
+insert into m_material values(5, '尼龙+玻纤', 'SLS',100.5, '淡黄色','喷砂,无,打磨,上色', '0.1','100','100,50,200');
+insert into m_material values(6, '砂岩', '3DP',100.6, '全彩','无,打磨', '0.1','100','100,50,200');
+insert into m_material values(7, '不锈钢', 'SLM',100.7,'','喷砂,无,打磨,抛光,电镀','0.1,0.02','100','100,50,200');
 
 
 drop table if exists m_max_available;

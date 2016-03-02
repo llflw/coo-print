@@ -22,22 +22,23 @@ trait Tables {
    *  @param materialId Database column material_id SqlType(int4), PrimaryKey
    *  @param materialName Database column material_name SqlType(varchar), Length(32,true)
    *  @param tech Database column tech SqlType(varchar), Length(32,true)
+   *  @param price Database column price SqlType(numeric)
    *  @param vColor Database column v_color SqlType(varchar), Length(32,true)
    *  @param vFinish Database column v_finish SqlType(varchar), Length(32,true)
    *  @param vLayer Database column v_layer SqlType(varchar), Length(32,true)
    *  @param vFill Database column v_fill SqlType(varchar), Length(32,true)
    *  @param vZoom Database column v_zoom SqlType(varchar), Length(32,true) */
-  case class MMaterialRow(materialId: Int, materialName: String, tech: String, vColor: String, vFinish: String, vLayer: String, vFill: String, vZoom: String)
+  case class MMaterialRow(materialId: Int, materialName: String, tech: String, price: scala.math.BigDecimal, vColor: String, vFinish: String, vLayer: String, vFill: String, vZoom: String)
   /** GetResult implicit for fetching MMaterialRow objects using plain SQL queries */
-  implicit def GetResultMMaterialRow(implicit e0: GR[Int], e1: GR[String]): GR[MMaterialRow] = GR{
+  implicit def GetResultMMaterialRow(implicit e0: GR[Int], e1: GR[String], e2: GR[scala.math.BigDecimal]): GR[MMaterialRow] = GR{
     prs => import prs._
-    MMaterialRow.tupled((<<[Int], <<[String], <<[String], <<[String], <<[String], <<[String], <<[String], <<[String]))
+    MMaterialRow.tupled((<<[Int], <<[String], <<[String], <<[scala.math.BigDecimal], <<[String], <<[String], <<[String], <<[String], <<[String]))
   }
   /** Table description of table m_material. Objects of this class serve as prototypes for rows in queries. */
   class MMaterial(_tableTag: Tag) extends Table[MMaterialRow](_tableTag, "m_material") {
-    def * = (materialId, materialName, tech, vColor, vFinish, vLayer, vFill, vZoom) <> (MMaterialRow.tupled, MMaterialRow.unapply)
+    def * = (materialId, materialName, tech, price, vColor, vFinish, vLayer, vFill, vZoom) <> (MMaterialRow.tupled, MMaterialRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(materialId), Rep.Some(materialName), Rep.Some(tech), Rep.Some(vColor), Rep.Some(vFinish), Rep.Some(vLayer), Rep.Some(vFill), Rep.Some(vZoom)).shaped.<>({r=>import r._; _1.map(_=> MMaterialRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(materialId), Rep.Some(materialName), Rep.Some(tech), Rep.Some(price), Rep.Some(vColor), Rep.Some(vFinish), Rep.Some(vLayer), Rep.Some(vFill), Rep.Some(vZoom)).shaped.<>({r=>import r._; _1.map(_=> MMaterialRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column material_id SqlType(int4), PrimaryKey */
     val materialId: Rep[Int] = column[Int]("material_id", O.PrimaryKey)
@@ -45,6 +46,8 @@ trait Tables {
     val materialName: Rep[String] = column[String]("material_name", O.Length(32,varying=true))
     /** Database column tech SqlType(varchar), Length(32,true) */
     val tech: Rep[String] = column[String]("tech", O.Length(32,varying=true))
+    /** Database column price SqlType(numeric) */
+    val price: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("price")
     /** Database column v_color SqlType(varchar), Length(32,true) */
     val vColor: Rep[String] = column[String]("v_color", O.Length(32,varying=true))
     /** Database column v_finish SqlType(varchar), Length(32,true) */
