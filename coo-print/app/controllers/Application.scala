@@ -15,7 +15,6 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 import models._
 import models.Tables._
-import models.Tables.MMaterialRow
 import play.api.i18n.Messages
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Logger
@@ -28,27 +27,31 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.collection.mutable.ListBuffer
 
+import helpers._
+
 object Application {
-  
-  val SKEY_OF_CLIENT_ID = "c_id"
+
   val SKEY_OF_UPLOAD_FILE_COUNT = "uploadFileCount"
   val SKEY_OF_ORDER_PRICE = "orderPrice"
   val SKEY_OF_TOTAL_PRICE = "totalPrice"
   
-  val CKEY_OF_UPLOAD_FILES = "-uploadFiles"
+  val FKEY_OF_SHOPPING_NEXT_STEP = "shoppingNextStep"
+  
+  val CKEY_OF_UPLOAD_FILES = "uploadFiles"
   val CKEY_OF_TABLE_MMATERIAL = "table_m_material"
 }
 
 class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, val messagesApi: MessagesApi, val cache: CacheApi) extends Controller with I18nSupport {
 
+  val userCache: UserCache = new UserCache(cache)
   
   object CPAction extends ActionBuilder[Request] {
     def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
       import java.time.LocalDateTime
       Logger.info("Calling action:" + request.path + " - " + LocalDateTime.now())
       block(request).map { result => 
-        if (request.session.get(Application.SKEY_OF_CLIENT_ID).isEmpty) {
-          result.withSession(request.session + (Application.SKEY_OF_CLIENT_ID -> UUID.randomUUID().toString()))
+        if (request.session.get(UserCache.SKEY_OF_CLIENT_ID).isEmpty) {          
+          result.withSession(request.session + (UserCache.SKEY_OF_CLIENT_ID -> UUID.randomUUID().toString()))
         } else result
       }
     }
@@ -68,17 +71,38 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   
   def editItems = CPAction { implicit request =>
     
-    val cachedMaterials = cache.getOrElse[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL){
-      val materialRows : Future[Seq[MMaterialRow]] = dbConfig.db.run(MMaterial.result)
+   val cachedMaterials = userCache.get[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).getOrElse{
+      val materialRows : Future[Seq[Tables.MMaterialRow]] = dbConfig.db.run(MMaterial.result)
       val materials = Await.result(materialRows, Duration(1, "sec")).toList
-      cache.set(Application.CKEY_OF_TABLE_MMATERIAL, materials)
-      materials
+      userCache.set[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL, materials).get
     }
-   
         
-    val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
-    val orderItemList = cache.get[ListBuffer[OrderItem]](c_id + Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
-    Ok(views.html.editItems(orderItemList))
+    //val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
+    //val orderItemList = cache.get[ListBuffer[OrderItem]](c_id + Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    
+    val orderItemList = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    
+    Ok(views.html.editItems(orderItemList.toList, cachedMaterials))
+    .flashing(Application.FKEY_OF_SHOPPING_NEXT_STEP -> "shopping-next-contact")
+  }
+  
+  def getItem(fileName : String) = CPAction { implicit request =>
+   
+    //val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
+    //val uploadFilesKey = c_id+Application.CKEY_OF_UPLOAD_FILES
+    //val allOrderItems = cache.get[ListBuffer[OrderItem]](uploadFilesKey).getOrElse(ListBuffer())
+    
+    val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    val cachedMaterials = userCache.get[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).getOrElse(List())
+
+    val orderItems = allOrderItems.filter { oi => oi.fileName == fileName }
+    if (orderItems.length > 0) {
+      Ok(views.html.orderItem(allOrderItems.length, orderItems(0), cachedMaterials))
+    } else {
+      Ok("")
+    }
+    
+    
   }
   
   /**
@@ -116,6 +140,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * logout action
    */
   def logout = CPAction { implicit request =>
+    userCache.remove();
     Redirect(routes.Application.index).withNewSession
   }
   
@@ -123,7 +148,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * file upload action
    */
   def upload = CPAction(parse.multipartFormData) {implicit request =>
-      
+  
     request.body.file("files[]").map { file =>
       import java.io.File
       import java.nio.file.Path
@@ -132,7 +157,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       
       val uploadFileDir = Play.current.configuration.getString("cp.upload.dir").getOrElse("/tmp")
       
-      val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
+      val c_id = request.session.get(UserCache.SKEY_OF_CLIENT_ID).get
       val pdir = Paths.get(uploadFileDir, c_id)
       
       if (!Files.isDirectory(pdir)) {
@@ -143,13 +168,14 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       
       file.ref.moveTo(pdir.resolve(filename).toFile())
 
-      val uploadFilesKey = c_id+Application.CKEY_OF_UPLOAD_FILES
-      val allOrderItems = cache.get[ListBuffer[OrderItem]](uploadFilesKey).getOrElse(ListBuffer())+=(OrderItem(filename))
-      cache.set(uploadFilesKey, allOrderItems);
+      val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES)
+                          .getOrElse(userCache.set[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES, ListBuffer()).get)+=(OrderItem(filename))
+
       val json = Json.parse(s"""
         { "files":[{"name":"$filename"}] }
         """)
       val orderPrice = "%.2f".format(allOrderItems.foldLeft(0.0)(_ + _.price))
+      
       Ok(json)
       .addingToSession((Application.SKEY_OF_UPLOAD_FILE_COUNT -> allOrderItems.length.toString()))
       .addingToSession((Application.SKEY_OF_ORDER_PRICE -> orderPrice))
@@ -193,10 +219,8 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * delete order item : uploaded file
    */
   def delItem(fileName : String) = Action { implicit request =>
-    val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
-    val uploadFilesKey = c_id+Application.CKEY_OF_UPLOAD_FILES
-    val allOrderItems = cache.get[ListBuffer[OrderItem]](uploadFilesKey).getOrElse(ListBuffer())-=(OrderItem(fileName))
-    cache.set(uploadFilesKey, allOrderItems);
+
+    val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())-=(OrderItem(fileName))
     
     val orderPrice = "%.2f".format(allOrderItems.foldLeft(0.0)(_ + _.price))
     Ok("")
@@ -206,10 +230,17 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   }
   
   /**
-   * submit order
+   * submit items
    */
-  def submitOrder = CPAction { implicit request =>
-    Ok("abc");
+  def submitItems = CPAction { implicit request =>
+    Redirect(routes.Application.editContact);
   }
-
+  
+  
+  /**
+   * edit contact
+   */
+  def editContact = CPAction { implicit request =>
+    Ok(views.html.editContact());
+  }
 }

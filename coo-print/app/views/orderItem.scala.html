@@ -1,6 +1,6 @@
-@import models.Tables.MMaterialRow
-@import controllers.Application
-@(idx: Int, orderItem: OrderItem)
+@* orderItem Template File *@
+@(idx: Int, orderItem: OrderItem, materialList: List[Tables.MMaterialRow])
+
         <div class="order-item" id="orderItem_@idx">
 
             <input class="form-control" type="hidden" name="fileName" value="@{orderItem.fileName}">
@@ -35,7 +35,7 @@
             <td style="width:40%">
            <select class="form-control" id="item_material_@idx" name="item_material">
             @import play.api.Play.current
-            @for(mr <- play.api.cache.Cache.getAs[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).get ) {
+            @for(mr <- materialList ) {
             <option value="@mr.materialId" data-price="@mr.price" data-name="@mr.materialName" @if(mr.materialName == orderItem.material){
              selected
              }>@mr.materialName ￥@mr.price</option>
@@ -44,7 +44,7 @@
             </td>
             <td>
 
-@defining(play.api.cache.Cache.getAs[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).get.filter(xmr => xmr.materialName == orderItem.material)(0)) {cMaterial =>            
+@defining(materialList.filter(xmr => xmr.materialName == orderItem.material)(0)) {cMaterial =>            
             <tr><td style="width:20%;height:40px;"><span>颜色</span>
             </td>
             <td style="width:40%">

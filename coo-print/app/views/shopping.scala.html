@@ -1,30 +1,33 @@
+@(step: String)(content:Html)(implicit session: Session, flash: Flash)
+
 @import controllers.Application
-@(content:Html)(implicit session: Session)
+
 @main{
     <div class="container" style="padding-bottom:48px;margin-top:-10px;">
     
     <div class="row" style="margin-top:0px;">
 
         <div class="col-md-9">
-            <div class="row">
-            <div class="col-md-4" ><div class="shopping-card shopping-card-active">
-            <p class="card-title">文件预览与打印设置</p>
-            <p class="card-desc">添加打印文件、选择材料、修改打印设置，预览价格</p>
-            </div></div>
-            <div class="col-md-4" ><div class="shopping-card" >
-            <p class="card-title">完善地址与联系人信息</p>
-            <p class="card-desc">添加您希望我们邮寄的地址和联系人信息</p>
-            </div></div>
-            <div class="col-md-4" ><div class="shopping-card">
-            <p class="card-title">支付下单与开票信息</p>
-            <p class="card-desc">支持网银、支付宝、微信支付，可开具增值税发票</p>
-            </div></div>
+	        <div class="row">
+	            <div class="col-md-4" ><div class='shopping-card @if(step == "item"){shopping-card-active}'>
+	            <p class="card-title">文件预览与打印设置<a href="/editItems" class='shopping-modify @if(step == "item"){invisible}'> 修改</a></p>
+	            <p class="card-desc">添加打印文件、选择材料、修改打印设置，预览价格</p>
+	            </div>@if(step == "item"){<div class='arrow-down'></div>}
+	            </div>
+	            
+	            <div class="col-md-4" ><div class='shopping-card @if(step == "contact"){shopping-card-active}' >
+	            <p class="card-title">完善地址与联系人信息 <a href="/editContact" class='shopping-modify @if(step == "item" || step == "contact"){invisible}'> 修改</a></p>
+	            <p class="card-desc">添加您希望我们邮寄的地址和联系人信息</p>
+	            </div>@if(step == "contact"){<div class='arrow-down'></div>}
+	            </div>
+	            
+	            <div class="col-md-4" ><div class='shopping-card @if(step == "pay"){shopping-card-active}'>
+	            <p class="card-title">支付下单与开票信息</p>
+	            <p class="card-desc">支持网银、支付宝、微信支付，可开具增值税发票</p>
+	            </div>@if(step == "pay"){<div class='arrow-down'></div>}
+	            </div>
             </div>
-            <div class="row">
-            <div class="col-md-4" ><div class="arrow-down"></div></div>
-            <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
-            <div class="col-md-4" ><div class="arrow-down invisible"></div></div>
-            </div>
+
             
            @content
 
@@ -36,18 +39,19 @@
         <div style="background-color:#fff;margin-left:-15px;margin-right: -15px; padding-left:10px;padding-right:10px;">
           <p style="padding-top: 40px;margin-bottom: 20px;"><img src='@routes.Assets.versioned("images/cart.png")'><span style='font-size: 24px;'> 您的购物车</span></p>
           <table style="width:100%;font-size:18px;">
-            <tr><td style="height:60px;">3D打印 （<span class="order-count">@(session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse(0))</span>件）</td>
-            <td>￥<span class="order-price">@(session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0))</span></td></tr>
+            <tr><td style="height:60px;">3D打印 （<span class="order-count">@session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse(0)</span>件）</td>
+            <td>￥<span class="order-price">@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0)</span></td></tr>
             <tr><td>后处理</td><td>免费</td></tr>
           </table>
           <div class="shopping-line"></div>
           <p style="font-size:18px;">合计金额:</p>
           <p style="font-size:14px;margin-left: 40px;">（不含税费、运费）</p>
-          <p class="total-price">￥<span>@(session.get(Application.SKEY_OF_TOTAL_PRICE).getOrElse(0))</span></p>
+          <p style="font-size:24px;text-align: right;margin-top:20px;margin-bottom:20px;padding-right:20px;">
+                        ￥<span class="total-price">@(session.get(Application.SKEY_OF_TOTAL_PRICE).getOrElse(0))</span></p>
           <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
           
             </div>
-            <a href="#" class="btn btn-primary btn-lg btn-lg-1 shopping-next-btn" >下一步 >> </a>
+            <button class='btn btn-primary btn-lg btn-lg-1' id="shopping-step-@step" >下一步 >> </button>
 
         </div>
         </div>

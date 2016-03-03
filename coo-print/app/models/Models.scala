@@ -19,7 +19,7 @@ case class OrderItem(
 }
 
 object OrderItem {
-  def apply(fileName: String) : OrderItem = OrderItem(fileName, 5, "PLA塑料", "原色", "无", "0.3", "15", "100", 10.15, "230 x 150 x 140 mm", 2)
+  def apply(fileName: String) : OrderItem = OrderItem(fileName, 1, "PLA塑料", "原色", "无", "0.3", "15", "100", 100.1, "230 x 150 x 140 mm", 2)
   
   
 }

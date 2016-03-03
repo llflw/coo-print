@@ -20,5 +20,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /props/:mid                 controllers.Application.props(mid)
 
 DELETE  /item/:fileName             controllers.Application.delItem(fileName)
+GET     /item/:fileName             controllers.Application.getItem(fileName)
 
-POST    /submitOrder                controllers.Application.submitOrder
+POST    /submitItems                controllers.Application.submitItems
+
+GET     /editContact                   controllers.Application.editContact
