@@ -43,6 +43,7 @@ $(function () {
         	    		}
         	    	});
         	    	$( this ).show();
+        	    	$('#shopping-step-item').removeAttr('disabled');
         		  });
         	}
         	
@@ -206,6 +207,9 @@ $(function () {
         	    		
         	    		var oic = Number($('.order-count').text()) - 1
         	    		$('.order-count').text(oic);
+        	    		if (oic <= 0) {
+        	    			$('#shopping-step-item').attr('disabled', true);
+        	    		}
         	    		
         	    		var price = (Number($('.order-price').text()) - Number($(this).find('.item-total-price').text())).toFixed(2);
         	    		$('.order-price').text(price);

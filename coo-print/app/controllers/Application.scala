@@ -75,23 +75,15 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       val materialRows : Future[Seq[Tables.MMaterialRow]] = dbConfig.db.run(MMaterial.result)
       val materials = Await.result(materialRows, Duration(1, "sec")).toList
       userCache.set[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL, materials).get
-    }
-        
-    //val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
-    //val orderItemList = cache.get[ListBuffer[OrderItem]](c_id + Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    }     
     
     val orderItemList = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
     
     Ok(views.html.editItems(orderItemList.toList, cachedMaterials))
-    .flashing(Application.FKEY_OF_SHOPPING_NEXT_STEP -> "shopping-next-contact")
   }
   
   def getItem(fileName : String) = CPAction { implicit request =>
    
-    //val c_id = request.session.get(Application.SKEY_OF_CLIENT_ID).get
-    //val uploadFilesKey = c_id+Application.CKEY_OF_UPLOAD_FILES
-    //val allOrderItems = cache.get[ListBuffer[OrderItem]](uploadFilesKey).getOrElse(ListBuffer())
-    
     val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
     val cachedMaterials = userCache.get[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).getOrElse(List())
 
@@ -190,12 +182,12 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   /**
    * get various material properties
    */
-  def props(mid : String) = Action {
+  def props(mid : String) = Action { implicit request =>
     val defaultJson = Json.parse("""{
          "color" : [""], "finish" : [""],"fill" : [""],"layer" : [""],"zoom" : [""]
           }""")
           
-    cache.get[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL) match {
+    userCache.get[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL) match {
       case Some(materials) => 
         val filteredMrs = materials.filter { mr => mr.materialId == mid.toInt }
         if (filteredMrs.length > 0) {
@@ -233,6 +225,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * submit items
    */
   def submitItems = CPAction { implicit request =>
+
     Redirect(routes.Application.editContact);
   }
   

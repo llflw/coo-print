@@ -17,9 +17,9 @@
             
             <table style="width:100%;margin-left:10px;">
             
-            <tr><td style="width:20%;height:40px;"><span>数量</span>
+            <tr><td style="width:30%;height:40px;"><span>数量</span>
             </td>
-            <td style="width:40%">
+            <td>
             <select class="form-control" id="item_quantity_@idx" name="item_quantity" >
              @for(i <- 1 to 8){
              <option value="@i" @if(i == orderItem.quantity){
@@ -27,12 +27,11 @@
              }>@i</option>
              }
             </select>
-            </td>
-            <td></td></tr>
+            </td></tr>
             
-            <tr><td style="width:20%;height:40px;"><span>材料</span>
+            <tr><td style="width:30%;height:40px;"><span>材料</span>
             </td>
-            <td style="width:40%">
+            <td>
            <select class="form-control" id="item_material_@idx" name="item_material">
             @import play.api.Play.current
             @for(mr <- materialList ) {
@@ -42,12 +41,11 @@
             }
             </select>
             </td>
-            <td>
 
 @defining(materialList.filter(xmr => xmr.materialName == orderItem.material)(0)) {cMaterial =>            
-            <tr><td style="width:20%;height:40px;"><span>颜色</span>
+            <tr><td style="width:30%;height:40px;"><span>颜色</span>
             </td>
-            <td style="width:40%">
+            <td>
             <select class="form-control" id="item_color_@idx" name="item_color">
               @for(color <- cMaterial.vColor.split(",")) {
                 <option @if(color == orderItem.color){
@@ -55,8 +53,7 @@
              }>@color</option>
               }
             </select>
-            </td>
-            <td></td></tr>
+            </td></tr>
       
             </table>
       
@@ -71,9 +68,9 @@
             
             <table style="width:100%;margin-left:10px;display:none;margin-top:10px;">
             
-            <tr><td style="width:20%;height:40px;"><span>后处理</span>
+            <tr><td style="width:30%;height:40px;"><span>后处理</span>
             </td>
-            <td style="width:40%">
+            <td>
             <select class="form-control" id="item_finish_@idx" name="item_finish">
             @for(finish <- cMaterial.vFinish.split(",")) {
                 <option @if(finish == orderItem.finish){
@@ -81,12 +78,11 @@
              }>@finish</option>
               }
             </select>
-            </td>
-            <td></td></tr>
+            </td></tr>
             
-                        <tr><td style="width:20%;height:40px;"><span>层厚</span>
+            <tr><td style="width:30%;height:40px;"><span>层厚</span>
             </td>
-            <td style="width:40%">
+            <td>
             <select class="form-control" id="item_layer_@idx" name="item_layer">
             @for(layer <- cMaterial.vLayer.split(",")) {
                 <option @if(layer == orderItem.layer){
@@ -94,12 +90,11 @@
              }>@layer</option>
               }
             </select>
-            </td>
-            <td></td></tr>
+            </td></tr>
             
-                              <tr><td style="width:20%;height:40px;"><span>填充率</span>
+            <tr><td style="width:30%;height:40px;"><span>填充率</span>
             </td>
-            <td style="width:40%">
+            <td>
             <select class="form-control" id="item_fill_@idx" name="item_fill">
             @for(fill <- cMaterial.vFill.split(",")) {
                 <option @if(fill == orderItem.fill){
@@ -107,12 +102,11 @@
              }>@fill</option>
               }
             </select>
-            </td>
-            <td></td></tr>
+            </td></tr>
 
-            <tr><td style="width:20%;height:40px;"><span>尺寸缩放</span>
+            <tr><td style="width:30%;height:40px;"><span>尺寸缩放</span>
             </td>
-            <td style="width:40%">
+            <td>
             <select class="form-control" id="item_zoom_@idx" name="item_zoom">
             @for(zoom <- cMaterial.vZoom.split(",")) {
                 <option @if(zoom == orderItem.zoom){
@@ -120,8 +114,7 @@
              }>@zoom</option>
               }
             </select>
-            </td>
-            <td></td></tr>
+            </td></tr>
       
             </table>
             

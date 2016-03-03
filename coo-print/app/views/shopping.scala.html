@@ -51,7 +51,7 @@
           <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
           
             </div>
-            <button class='btn btn-primary btn-lg btn-lg-1' id="shopping-step-@step" >下一步 >> </button>
+            <button class='btn btn-primary btn-lg btn-lg-1 shopping-next-btn' id="shopping-step-@step" @if(session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse("0").asInstanceOf[String].toInt <= 0){disabled}>下一步 >> </button>
 
         </div>
         </div>
