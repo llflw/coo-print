@@ -7,6 +7,7 @@
     color: #fff;
     padding-top: 20px;
     padding-bottom: 20px;
+    padding-right:20px;
 }
 
 .shopping-card-active {
@@ -49,11 +50,12 @@
 }
 .card-desc {
     font-size: 14px;
-    margin-left:110px;
+    margin-left:90px;
 }
 
 .shopping-modify {
 	font-size:12px;
+	float:right;
 }
 
 

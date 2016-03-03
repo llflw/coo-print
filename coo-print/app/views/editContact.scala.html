@@ -10,8 +10,12 @@
 
   <div class="form-group">
     <label for="addressee" class="col-sm-2 control-label"><span class="error">* </span>收件人</label>
+    
     <div class="col-sm-6">
-      <input type="text" class="form-control" id="addressee" name="addressee" placeholder="请输入收件人姓名">
+    <div class="input-group">
+      <input type="text" class="form-control" id="addressee" name="addressee" placeholder="请输入收件人姓名" required>
+      <div class="input-group-addon @if(session.get("user_name").isEmpty) {invisible}"><a href="#"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></a>  </div>
+    </div>
     </div>
     <div class="col-sm-4"><p style="text-align:right;font-size:16px;color:#ff8080;padding-top:3px;padding-right:20px;">标 * 为必填项</p> </div>
   </div>
@@ -26,28 +30,28 @@
   <div class="form-group">
     <label for="province" class="col-sm-2 control-label"><span class="error">* </span>省/市/区</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="province" name="province" placeholder="省/市/区">
+      <input type="text" class="form-control" id="province" name="province" placeholder="省/市/区" required>
     </div>
   </div>
   
   <div class="form-group">
     <label for="detail_address" class="col-sm-2 control-label"><span class="error">* </span>详细地址</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="detail_address" name="detail_address" placeholder="详细街道，请精确到门牌号，以便快递大哥准确投递">
+      <input type="text" class="form-control" id="detail_address" name="detail_address" placeholder="详细街道，请精确到门牌号，以便快递大哥准确投递" required>
     </div>
   </div>  
 
   <div class="form-group">
     <label for="tel" class="col-sm-2 control-label"><span class="error">* </span>联系电话</label>
     <div class="col-sm-8">
-      <input type="tel" class="form-control" id="tel" name="tel" placeholder="请输入联系人的电话或手机号码">
+      <input type="tel" class="form-control" id="tel" name="tel" placeholder="请输入联系人的电话或手机号码" required>
     </div>
   </div>
   
   <div class="form-group">
     <label for="email" class="col-sm-2 control-label"><span class="error">* </span>电子邮箱</label>
     <div class="col-sm-8">
-      <input type="email" class="form-control" id="email" name="email" placeholder="请输入联系人的常用邮箱，以便查询订单状态等信息">
+      <input type="email" class="form-control" id="email" name="email" placeholder="请输入联系人的常用邮箱，以便查询订单状态等信息" required>
     </div>
   </div>
 
@@ -60,19 +64,48 @@
 
 <div class="row">
 <div class="col-md-9 "></div>  
-<div class="col-md-3 "><a href="#" class="btn"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span><span style='font-size:14px;'> 保存到我的常用地址</span></a> </div>
+<div class="col-md-3 "><a href="#" class="btn @if(session.get("user_name").isEmpty) {invisible}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span><span style='font-size:14px;'> 保存到我的常用地址</span></a> </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-top:10px;">
 <div class="col-md-2 "><span style='font-size:18px;'>寄送方式</span> </div>  
 <div class="col-md-10 ">
 
-<div class="row">
-<div class="col-md-4 ">1</div>  
-<div class="col-md-4 ">2</div>
-<div class="col-md-4 ">3</div>
+<div class="row" style="padding-left:10px;">
+<div class="col-md-4">
+<div class="radio">
+  <label>
+    <input type="radio" name="post_mathod" id="post_mathod1" value="sf" checked><span>顺丰标快</span>
+  </label>
+   <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+</div>
+</div>
+<div class="col-md-4">
+<div class="radio">
+  <label>
+    <input type="radio" name="post_mathod" id="post_mathod2" value="other"><span>其他快递</span> 
+  </label>
+  <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+</div>
+</div>
+<div class="col-md-4">
+<div class="radio">
+  <label>
+    <input type="radio" name="post_mathod" id="post_mathod2" value="self">上门自取 
+  </label>
+</div>
+</div>
 </div>
 
+<div class="row" style="padding-left:10px;margin-top:10px;">
+<div class="col-md-12">
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">运费到付
+  </label>
+</div>
+</div>
+</div>
 
 </div>
 </div>
