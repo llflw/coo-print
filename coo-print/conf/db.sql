@@ -36,12 +36,15 @@ create table p_order
 (
   order_id character varying(10) not null,
   order_dt timestamp without time zone not null,
-  user_id character varying(10) not null,
+  user_id character varying(32) not null,
   address_id integer not null,
   order_price numeric not null,
-  order_status integer not null default 0,
+  order_status character varying(10) not null,
+  post_method character varying(32) not null,
+  freight_collect boolean not null,
+  pay_method character varying(32) not null,
   user_memo text,
-  oper_memo text,
+  oper_memo text,  
   constraint order_pk primary key (order_id)
 );
 

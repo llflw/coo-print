@@ -23,22 +23,22 @@ trait Tables {
    *  @param materialName Database column material_name SqlType(varchar), Length(32,true)
    *  @param tech Database column tech SqlType(varchar), Length(32,true)
    *  @param price Database column price SqlType(numeric)
-   *  @param vColor Database column v_color SqlType(varchar), Length(32,true)
-   *  @param vFinish Database column v_finish SqlType(varchar), Length(32,true)
-   *  @param vLayer Database column v_layer SqlType(varchar), Length(32,true)
-   *  @param vFill Database column v_fill SqlType(varchar), Length(32,true)
-   *  @param vZoom Database column v_zoom SqlType(varchar), Length(32,true) */
-  case class MMaterialRow(materialId: Int, materialName: String, tech: String, price: scala.math.BigDecimal, vColor: String, vFinish: String, vLayer: String, vFill: String, vZoom: String)
+   *  @param vColor Database column v_color SqlType(varchar), Length(32,true), Default(None)
+   *  @param vFinish Database column v_finish SqlType(varchar), Length(32,true), Default(None)
+   *  @param vLayer Database column v_layer SqlType(varchar), Length(32,true), Default(None)
+   *  @param vFill Database column v_fill SqlType(varchar), Length(32,true), Default(None)
+   *  @param vZoom Database column v_zoom SqlType(varchar), Length(32,true), Default(None) */
+  case class MMaterialRow(materialId: Int, materialName: String, tech: String, price: scala.math.BigDecimal, vColor: Option[String] = None, vFinish: Option[String] = None, vLayer: Option[String] = None, vFill: Option[String] = None, vZoom: Option[String] = None)
   /** GetResult implicit for fetching MMaterialRow objects using plain SQL queries */
-  implicit def GetResultMMaterialRow(implicit e0: GR[Int], e1: GR[String], e2: GR[scala.math.BigDecimal]): GR[MMaterialRow] = GR{
+  implicit def GetResultMMaterialRow(implicit e0: GR[Int], e1: GR[String], e2: GR[scala.math.BigDecimal], e3: GR[Option[String]]): GR[MMaterialRow] = GR{
     prs => import prs._
-    MMaterialRow.tupled((<<[Int], <<[String], <<[String], <<[scala.math.BigDecimal], <<[String], <<[String], <<[String], <<[String], <<[String]))
+    MMaterialRow.tupled((<<[Int], <<[String], <<[String], <<[scala.math.BigDecimal], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String]))
   }
   /** Table description of table m_material. Objects of this class serve as prototypes for rows in queries. */
   class MMaterial(_tableTag: Tag) extends Table[MMaterialRow](_tableTag, "m_material") {
     def * = (materialId, materialName, tech, price, vColor, vFinish, vLayer, vFill, vZoom) <> (MMaterialRow.tupled, MMaterialRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(materialId), Rep.Some(materialName), Rep.Some(tech), Rep.Some(price), Rep.Some(vColor), Rep.Some(vFinish), Rep.Some(vLayer), Rep.Some(vFill), Rep.Some(vZoom)).shaped.<>({r=>import r._; _1.map(_=> MMaterialRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(materialId), Rep.Some(materialName), Rep.Some(tech), Rep.Some(price), vColor, vFinish, vLayer, vFill, vZoom).shaped.<>({r=>import r._; _1.map(_=> MMaterialRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6, _7, _8, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column material_id SqlType(int4), PrimaryKey */
     val materialId: Rep[Int] = column[Int]("material_id", O.PrimaryKey)
@@ -48,16 +48,16 @@ trait Tables {
     val tech: Rep[String] = column[String]("tech", O.Length(32,varying=true))
     /** Database column price SqlType(numeric) */
     val price: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("price")
-    /** Database column v_color SqlType(varchar), Length(32,true) */
-    val vColor: Rep[String] = column[String]("v_color", O.Length(32,varying=true))
-    /** Database column v_finish SqlType(varchar), Length(32,true) */
-    val vFinish: Rep[String] = column[String]("v_finish", O.Length(32,varying=true))
-    /** Database column v_layer SqlType(varchar), Length(32,true) */
-    val vLayer: Rep[String] = column[String]("v_layer", O.Length(32,varying=true))
-    /** Database column v_fill SqlType(varchar), Length(32,true) */
-    val vFill: Rep[String] = column[String]("v_fill", O.Length(32,varying=true))
-    /** Database column v_zoom SqlType(varchar), Length(32,true) */
-    val vZoom: Rep[String] = column[String]("v_zoom", O.Length(32,varying=true))
+    /** Database column v_color SqlType(varchar), Length(32,true), Default(None) */
+    val vColor: Rep[Option[String]] = column[Option[String]]("v_color", O.Length(32,varying=true), O.Default(None))
+    /** Database column v_finish SqlType(varchar), Length(32,true), Default(None) */
+    val vFinish: Rep[Option[String]] = column[Option[String]]("v_finish", O.Length(32,varying=true), O.Default(None))
+    /** Database column v_layer SqlType(varchar), Length(32,true), Default(None) */
+    val vLayer: Rep[Option[String]] = column[Option[String]]("v_layer", O.Length(32,varying=true), O.Default(None))
+    /** Database column v_fill SqlType(varchar), Length(32,true), Default(None) */
+    val vFill: Rep[Option[String]] = column[Option[String]]("v_fill", O.Length(32,varying=true), O.Default(None))
+    /** Database column v_zoom SqlType(varchar), Length(32,true), Default(None) */
+    val vZoom: Rep[Option[String]] = column[Option[String]]("v_zoom", O.Length(32,varying=true), O.Default(None))
   }
   /** Collection-like TableQuery object for table MMaterial */
   lazy val MMaterial = new TableQuery(tag => new MMaterial(tag))
@@ -176,36 +176,45 @@ trait Tables {
   /** Entity class storing rows of table POrder
    *  @param orderId Database column order_id SqlType(varchar), PrimaryKey, Length(10,true)
    *  @param orderDt Database column order_dt SqlType(timestamp)
-   *  @param userId Database column user_id SqlType(varchar), Length(10,true)
+   *  @param userId Database column user_id SqlType(varchar), Length(32,true)
    *  @param addressId Database column address_id SqlType(int4)
    *  @param orderPrice Database column order_price SqlType(numeric)
-   *  @param orderStatus Database column order_status SqlType(int4), Default(0)
+   *  @param orderStatus Database column order_status SqlType(varchar), Length(10,true)
+   *  @param postMethod Database column post_method SqlType(varchar), Length(32,true)
+   *  @param freightCollect Database column freight_collect SqlType(bool)
+   *  @param payMethod Database column pay_method SqlType(varchar), Length(32,true)
    *  @param userMemo Database column user_memo SqlType(text), Default(None)
    *  @param operMemo Database column oper_memo SqlType(text), Default(None) */
-  case class POrderRow(orderId: String, orderDt: java.sql.Timestamp, userId: String, addressId: Int, orderPrice: scala.math.BigDecimal, orderStatus: Int = 0, userMemo: Option[String] = None, operMemo: Option[String] = None)
+  case class POrderRow(orderId: String, orderDt: java.sql.Timestamp, userId: String, addressId: Int, orderPrice: scala.math.BigDecimal, orderStatus: String, postMethod: String, freightCollect: Boolean, payMethod: String, userMemo: Option[String] = None, operMemo: Option[String] = None)
   /** GetResult implicit for fetching POrderRow objects using plain SQL queries */
-  implicit def GetResultPOrderRow(implicit e0: GR[String], e1: GR[java.sql.Timestamp], e2: GR[Int], e3: GR[scala.math.BigDecimal], e4: GR[Option[String]]): GR[POrderRow] = GR{
+  implicit def GetResultPOrderRow(implicit e0: GR[String], e1: GR[java.sql.Timestamp], e2: GR[Int], e3: GR[scala.math.BigDecimal], e4: GR[Boolean], e5: GR[Option[String]]): GR[POrderRow] = GR{
     prs => import prs._
-    POrderRow.tupled((<<[String], <<[java.sql.Timestamp], <<[String], <<[Int], <<[scala.math.BigDecimal], <<[Int], <<?[String], <<?[String]))
+    POrderRow.tupled((<<[String], <<[java.sql.Timestamp], <<[String], <<[Int], <<[scala.math.BigDecimal], <<[String], <<[String], <<[Boolean], <<[String], <<?[String], <<?[String]))
   }
   /** Table description of table p_order. Objects of this class serve as prototypes for rows in queries. */
   class POrder(_tableTag: Tag) extends Table[POrderRow](_tableTag, "p_order") {
-    def * = (orderId, orderDt, userId, addressId, orderPrice, orderStatus, userMemo, operMemo) <> (POrderRow.tupled, POrderRow.unapply)
+    def * = (orderId, orderDt, userId, addressId, orderPrice, orderStatus, postMethod, freightCollect, payMethod, userMemo, operMemo) <> (POrderRow.tupled, POrderRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(orderId), Rep.Some(orderDt), Rep.Some(userId), Rep.Some(addressId), Rep.Some(orderPrice), Rep.Some(orderStatus), userMemo, operMemo).shaped.<>({r=>import r._; _1.map(_=> POrderRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(orderId), Rep.Some(orderDt), Rep.Some(userId), Rep.Some(addressId), Rep.Some(orderPrice), Rep.Some(orderStatus), Rep.Some(postMethod), Rep.Some(freightCollect), Rep.Some(payMethod), userMemo, operMemo).shaped.<>({r=>import r._; _1.map(_=> POrderRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10, _11)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column order_id SqlType(varchar), PrimaryKey, Length(10,true) */
     val orderId: Rep[String] = column[String]("order_id", O.PrimaryKey, O.Length(10,varying=true))
     /** Database column order_dt SqlType(timestamp) */
     val orderDt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("order_dt")
-    /** Database column user_id SqlType(varchar), Length(10,true) */
-    val userId: Rep[String] = column[String]("user_id", O.Length(10,varying=true))
+    /** Database column user_id SqlType(varchar), Length(32,true) */
+    val userId: Rep[String] = column[String]("user_id", O.Length(32,varying=true))
     /** Database column address_id SqlType(int4) */
     val addressId: Rep[Int] = column[Int]("address_id")
     /** Database column order_price SqlType(numeric) */
     val orderPrice: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("order_price")
-    /** Database column order_status SqlType(int4), Default(0) */
-    val orderStatus: Rep[Int] = column[Int]("order_status", O.Default(0))
+    /** Database column order_status SqlType(varchar), Length(10,true) */
+    val orderStatus: Rep[String] = column[String]("order_status", O.Length(10,varying=true))
+    /** Database column post_method SqlType(varchar), Length(32,true) */
+    val postMethod: Rep[String] = column[String]("post_method", O.Length(32,varying=true))
+    /** Database column freight_collect SqlType(bool) */
+    val freightCollect: Rep[Boolean] = column[Boolean]("freight_collect")
+    /** Database column pay_method SqlType(varchar), Length(32,true) */
+    val payMethod: Rep[String] = column[String]("pay_method", O.Length(32,varying=true))
     /** Database column user_memo SqlType(text), Default(None) */
     val userMemo: Rep[Option[String]] = column[Option[String]]("user_memo", O.Default(None))
     /** Database column oper_memo SqlType(text), Default(None) */

@@ -10,13 +10,13 @@
         <div class="col-md-9">
 	        <div class="row">
 	            <div class="col-md-4" ><div class='shopping-card @if(step == "item"){shopping-card-active}'>
-	            <p class="card-title">文件预览与打印设置<a href="/editItems" class='shopping-modify @if(step == "item"){invisible}'> 修改</a></p>
+	            <p class="card-title">文件预览与打印设置<a href="/s/editItems" class='shopping-modify @if(step == "item"){invisible}'> 修改</a></p>
 	            <p class="card-desc">添加打印文件、选择材料、修改打印设置，预览价格</p>
 	            </div>@if(step == "item"){<div class='arrow-down'></div>}
 	            </div>
 	            
 	            <div class="col-md-4" ><div class='shopping-card @if(step == "contact"){shopping-card-active}' >
-	            <p class="card-title">完善地址与联系人信息 <a href="/editContact" class='shopping-modify @if(step == "item" || step == "contact"){invisible}'> 修改</a></p>
+	            <p class="card-title">完善地址与联系人信息 <a href="/s/editContact" class='shopping-modify @if(step == "item" || step == "contact"){invisible}'> 修改</a></p>
 	            <p class="card-desc">添加您希望我们邮寄的地址和联系人信息</p>
 	            </div>@if(step == "contact"){<div class='arrow-down'></div>}
 	            </div>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="col-md-3" >
-        <div style="background-color:#fff;margin-left:-15px;margin-right: -15px; padding-left:10px;padding-right:10px;">
+        <div style="background-color:#fff;margin-left:-15px;margin-right: -15px; padding-left:20px;padding-right:10px;">
           <p style="padding-top: 40px;margin-bottom: 20px;"><img src='@routes.Assets.versioned("images/cart.png")'><span style='font-size: 24px;'> 您的购物车</span></p>
           <table style="width:100%;font-size:18px;">
             <tr><td style="height:60px;">3D打印 （<span class="order-count">@session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse(0)</span>件）</td>

@@ -1,7 +1,7 @@
 $(function () {
     'use strict';
     $('#fileupload').fileupload({
-        url: 'upload',
+        url: '/upload',
         dataType: 'json',
         limitConcurrentUploads: 1,
         sequentialUploads: true,
@@ -25,7 +25,7 @@ $(function () {
         		    $( this ).children().remove();
         	    	$.ajax({
         	    		type:"GET",
-        	    		url:"/item/"+data.files[0].name,
+        	    		url:"/s/item/"+data.files[0].name,
         	    		success:function(data2) {
         	    			var newItem = $(data2);
         	    			newItem.appendTo('#order_items_form');
@@ -116,7 +116,7 @@ $(function () {
 
     	$.ajax({
     		type:"GET",
-    		url:"/props/"+$(this).val(),
+    		url:"/s/props/"+$(this).val(),
     		success:function(data) {
     			color.children().remove();
     			$.each(data.color, function(i, c){
@@ -198,7 +198,7 @@ $(function () {
     	btnPrimary.click(function(event) {
         	$.ajax({
         		type:"DELETE",
-        		url:"/item/"+fileName,
+        		url:"/s/item/"+fileName,
         		success:function(data) {
         			
         			that.find('.btn-default').click();
@@ -227,6 +227,10 @@ $(function () {
     
     $('#shopping-step-item').click(function(event) {
     	$('#order_items_form').submit();
+    });
+    
+    $(document).on('click.bs.dropdown.data-api', '.self-show', function (e) {
+    	e.stopPropagation() 
     });
     
 });

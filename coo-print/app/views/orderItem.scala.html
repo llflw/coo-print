@@ -47,7 +47,7 @@
             </td>
             <td>
             <select class="form-control" id="item_color_@idx" name="item_color">
-              @for(color <- cMaterial.vColor.split(",")) {
+              @for(color <- cMaterial.vColor.getOrElse("").split(",")) {
                 <option @if(color == orderItem.color){
              selected
              }>@color</option>
@@ -72,7 +72,7 @@
             </td>
             <td>
             <select class="form-control" id="item_finish_@idx" name="item_finish">
-            @for(finish <- cMaterial.vFinish.split(",")) {
+            @for(finish <- cMaterial.vFinish.getOrElse("").split(",")) {
                 <option @if(finish == orderItem.finish){
              selected
              }>@finish</option>
@@ -84,7 +84,7 @@
             </td>
             <td>
             <select class="form-control" id="item_layer_@idx" name="item_layer">
-            @for(layer <- cMaterial.vLayer.split(",")) {
+            @for(layer <- cMaterial.vLayer.getOrElse("").split(",")) {
                 <option @if(layer == orderItem.layer){
              selected
              }>@layer</option>
@@ -96,7 +96,7 @@
             </td>
             <td>
             <select class="form-control" id="item_fill_@idx" name="item_fill">
-            @for(fill <- cMaterial.vFill.split(",")) {
+            @for(fill <- cMaterial.vFill.getOrElse("").split(",")) {
                 <option @if(fill == orderItem.fill){
              selected
              }>@fill</option>
@@ -108,7 +108,7 @@
             </td>
             <td>
             <select class="form-control" id="item_zoom_@idx" name="item_zoom">
-            @for(zoom <- cMaterial.vZoom.split(",")) {
+            @for(zoom <- cMaterial.vZoom.getOrElse("").split(",")) {
                 <option @if(zoom == orderItem.zoom){
              selected
              }>@zoom</option>

@@ -187,17 +187,17 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
          "color" : [""], "finish" : [""],"fill" : [""],"layer" : [""],"zoom" : [""]
           }""")
           
-    userCache.get[List[MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL) match {
+    userCache.get[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL) match {
       case Some(materials) => 
         val filteredMrs = materials.filter { mr => mr.materialId == mid.toInt }
         if (filteredMrs.length > 0) {
          val fmr = filteredMrs(0)
          val json = Json.obj(
-         "color" -> fmr.vColor.split(","),  
-         "finish" -> fmr.vFinish.split(","),
-         "fill" -> fmr.vFill.split(","),
-         "layer" -> fmr.vLayer.split(","),
-         "zoom" -> fmr.vZoom.split(",")
+         "color" -> fmr.vColor.getOrElse("").split(","),  
+         "finish" -> fmr.vFinish.getOrElse("").split(","),
+         "fill" -> fmr.vFill.getOrElse("").split(","),
+         "layer" -> fmr.vLayer.getOrElse("").split(","),
+         "zoom" -> fmr.vZoom.getOrElse("").split(",")
           )
           Ok(json) 
         } else {
