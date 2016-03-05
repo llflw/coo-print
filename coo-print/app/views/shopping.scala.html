@@ -21,10 +21,10 @@
 	            </div>@if(step == "contact"){<div class='arrow-down'></div>}
 	            </div>
 	            
-	            <div class="col-md-4" ><div class='shopping-card @if(step == "pay"){shopping-card-active}'>
+	            <div class="col-md-4" ><div class='shopping-card @if(step == "confirmOrder"){shopping-card-active}'>
 	            <p class="card-title">支付下单与开票信息</p>
 	            <p class="card-desc">支持网银、支付宝、微信支付，可开具增值税发票</p>
-	            </div>@if(step == "pay"){<div class='arrow-down'></div>}
+	            </div>@if(step == "confirmOrder"){<div class='arrow-down'></div>}
 	            </div>
             </div>
 
@@ -51,8 +51,7 @@
           <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
           
             </div>
-            <button class='btn btn-primary btn-lg btn-lg-1 shopping-next-btn' id="shopping-step-@step" @if(session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse("0").asInstanceOf[String].toInt <= 0){disabled}>下一步 >> </button>
-
+            <button id="shopping-step-@step" type="submit" class='btn btn-primary btn-lg btn-lg-1 shopping-next-btn' form="@(step)_form" @if(session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse("0").asInstanceOf[String].toInt <= 0){disabled}>下一步 >> </button>
         </div>
         </div>
       

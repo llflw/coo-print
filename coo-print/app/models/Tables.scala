@@ -131,10 +131,10 @@ trait Tables {
    *  @param province Database column province SqlType(varchar), Length(10,true)
    *  @param city Database column city SqlType(varchar), Length(10,true)
    *  @param district Database column district SqlType(varchar), Length(10,true)
-   *  @param detailAddress Database column detail_address SqlType(varchar), Length(100,true)
+   *  @param address Database column address SqlType(varchar), Length(100,true)
    *  @param tel Database column tel SqlType(varchar), Length(11,true)
    *  @param email Database column email SqlType(varchar), Length(64,true) */
-  case class PAddressRow(userId: String, addressId: Int, addressee: String, company: Option[String] = None, province: String, city: String, district: String, detailAddress: String, tel: String, email: String)
+  case class PAddressRow(userId: String, addressId: Int, addressee: String, company: Option[String] = None, province: String, city: String, district: String, address: String, tel: String, email: String)
   /** GetResult implicit for fetching PAddressRow objects using plain SQL queries */
   implicit def GetResultPAddressRow(implicit e0: GR[String], e1: GR[Int], e2: GR[Option[String]]): GR[PAddressRow] = GR{
     prs => import prs._
@@ -142,9 +142,9 @@ trait Tables {
   }
   /** Table description of table p_address. Objects of this class serve as prototypes for rows in queries. */
   class PAddress(_tableTag: Tag) extends Table[PAddressRow](_tableTag, "p_address") {
-    def * = (userId, addressId, addressee, company, province, city, district, detailAddress, tel, email) <> (PAddressRow.tupled, PAddressRow.unapply)
+    def * = (userId, addressId, addressee, company, province, city, district, address, tel, email) <> (PAddressRow.tupled, PAddressRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(userId), Rep.Some(addressId), Rep.Some(addressee), company, Rep.Some(province), Rep.Some(city), Rep.Some(district), Rep.Some(detailAddress), Rep.Some(tel), Rep.Some(email)).shaped.<>({r=>import r._; _1.map(_=> PAddressRow.tupled((_1.get, _2.get, _3.get, _4, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(userId), Rep.Some(addressId), Rep.Some(addressee), company, Rep.Some(province), Rep.Some(city), Rep.Some(district), Rep.Some(address), Rep.Some(tel), Rep.Some(email)).shaped.<>({r=>import r._; _1.map(_=> PAddressRow.tupled((_1.get, _2.get, _3.get, _4, _5.get, _6.get, _7.get, _8.get, _9.get, _10.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column user_id SqlType(varchar), Length(10,true) */
     val userId: Rep[String] = column[String]("user_id", O.Length(10,varying=true))
@@ -160,8 +160,8 @@ trait Tables {
     val city: Rep[String] = column[String]("city", O.Length(10,varying=true))
     /** Database column district SqlType(varchar), Length(10,true) */
     val district: Rep[String] = column[String]("district", O.Length(10,varying=true))
-    /** Database column detail_address SqlType(varchar), Length(100,true) */
-    val detailAddress: Rep[String] = column[String]("detail_address", O.Length(100,varying=true))
+    /** Database column address SqlType(varchar), Length(100,true) */
+    val address: Rep[String] = column[String]("address", O.Length(100,varying=true))
     /** Database column tel SqlType(varchar), Length(11,true) */
     val tel: Rep[String] = column[String]("tel", O.Length(11,varying=true))
     /** Database column email SqlType(varchar), Length(64,true) */

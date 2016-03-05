@@ -21,3 +21,7 @@ DELETE  /s/item/:fileName             controllers.Application.delItem(fileName)
 GET     /s/item/:fileName             controllers.Application.getItem(fileName)
 POST    /s/submitItems                controllers.Application.submitItems
 GET     /s/editContact                controllers.Application.editContact
+POST    /s/submitContact              controllers.Application.submitContact
+
+
+GET    /s/confirmOrder                controllers.Application.confirmOrder

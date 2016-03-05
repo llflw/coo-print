@@ -24,7 +24,7 @@ create table p_address
   province character varying(10) not null,
   city character varying(10) not null,
   district character varying(10) not null,
-  detail_address character varying(100) not null,
+  address character varying(100) not null,
   tel character varying(11) not null,
   email character varying(64) not null,
   constraint p_address_pk primary key (user_id, address_id)

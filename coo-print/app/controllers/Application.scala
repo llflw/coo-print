@@ -8,13 +8,13 @@ import play.api.mvc._
 import play.twirl.api._
 import play.api.libs.json._
 import play.api.cache._
-import play.api.data._
+import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.format.Formats._
 import slick.driver.PostgresDriver.api._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
-import models._
-import models.Tables._
+
 import play.api.i18n.Messages
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Logger
@@ -28,6 +28,9 @@ import scala.concurrent.duration.Duration
 import scala.collection.mutable.ListBuffer
 
 import helpers._
+import models._
+import models.Tables._
+import forms._
 
 object Application {
 
@@ -39,11 +42,51 @@ object Application {
   
   val CKEY_OF_UPLOAD_FILES = "uploadFiles"
   val CKEY_OF_TABLE_MMATERIAL = "table_m_material"
+  val CKEY_OF_CONTACT= "contact"
+  
+  val POSTMETHOD_SF = Map("sf1" -> "顺丰标快","sf2" -> "顺丰特惠","sf3" -> "顺丰即日","sf4" -> "顺丰次晨")
+  val POSTMETHOD_OTHER = Map("other1" -> "中通快递","other2" -> "圆通快递","other3" -> "申通快递")
+  
 }
 
 class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, val messagesApi: MessagesApi, val cache: CacheApi) extends Controller with I18nSupport {
 
   val userCache: UserCache = new UserCache(cache)
+  
+  
+  val contactForm : Form[ContactForm] = Form(
+        mapping(
+          "addressee" -> nonEmptyText,
+          "company" -> text,
+          "province" -> nonEmptyText,
+          "city" -> nonEmptyText,
+          "district" -> nonEmptyText,
+          "address" -> nonEmptyText,
+          "tel" -> nonEmptyText,
+          "email" -> nonEmptyText,
+          "other" -> text,
+          "post" -> nonEmptyText,
+          "fc" -> boolean
+          )(ContactForm.apply)(ContactForm.unapply)
+        )
+        
+   def orderItemForm(fileName: String): Form[OrderItemForm] = {
+    val fileNameShort = fileName.substring(0, fileName.indexOf("."))
+    Form (
+          single (
+              fileNameShort -> mapping (                  
+                "fileName" -> default(of[String], fileName),
+                "quantity" -> number(min = 1, max = 8), 
+                "material" -> number(min = 1, max = 7),
+                "color" -> of[String], 
+                "finish" -> of[String], 
+                "layer" -> of[String],
+                "fill" -> of[String], 
+                "zoom" -> of[String]
+              )(OrderItemForm.apply)(OrderItemForm.unapply)
+          )
+      )
+  }
   
   object CPAction extends ActionBuilder[Request] {
     def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
@@ -89,7 +132,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
     val orderItems = allOrderItems.filter { oi => oi.fileName == fileName }
     if (orderItems.length > 0) {
-      Ok(views.html.orderItem(allOrderItems.length, orderItems(0), cachedMaterials))
+      Ok(views.html.orderItem(orderItems(0), cachedMaterials))
     } else {
       Ok("")
     }
@@ -155,14 +198,20 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       if (!Files.isDirectory(pdir)) {
         Files.createDirectory(pdir);
       }
-      val filename = file.filename
+      var filename = file.filename
+      if (filename.indexOf(".") < 0) filename = filename + ".STL"
       //val contentType = file.contentType
       
-      file.ref.moveTo(pdir.resolve(filename).toFile())
-
       val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES)
-                          .getOrElse(userCache.set[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES, ListBuffer()).get)+=(OrderItem(filename))
+                          .getOrElse(userCache.set[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES, ListBuffer()).get)
+                      
+      if (allOrderItems.filter { x => x.fileName == filename }.length > 0 ) {
+        val idx = filename.indexOf(".")
+        filename = filename.substring(0, idx) + "-" + allOrderItems.length.toString() + filename.substring(idx, filename.length())
+      }
+      allOrderItems += (OrderItem(filename))
 
+      file.ref.moveTo(pdir.resolve(filename).toFile())
       val json = Json.parse(s"""
         { "files":[{"name":"$filename"}] }
         """)
@@ -225,8 +274,38 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * submit items
    */
   def submitItems = CPAction { implicit request =>
+    val fileNameForm = Form(
+      single(
+        "fileNames" -> list(text)
+      )
+    )
+    val fileNameList = fileNameForm.bindFromRequest().get
+    
+    val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    val materials = userCache.get[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL).getOrElse(List())
+    
+    assert(fileNameList.length == allOrderItems.length)
+    
+    for(fileName <- fileNameList) {
+      
+      Logger.info(fileName)
+      
+      val cOrderItem = orderItemForm(fileName).bindFromRequest().get
+      
+      val orderItemList = allOrderItems.filter { x => x.fileName == cOrderItem.fileName }
+      val material = materials.filter { x => x.materialId == cOrderItem.material }
+      if (orderItemList.length > 0) {
+        orderItemList(0).copyFrom(cOrderItem, material(0))        
+      }
+              
+    }
+    
+    val orderPrice = "%.2f".format(allOrderItems.foldLeft(0.0)(_ + _.price))
 
-    Redirect(routes.Application.editContact);
+    Redirect(routes.Application.editContact)
+    .addingToSession((Application.SKEY_OF_UPLOAD_FILE_COUNT -> allOrderItems.length.toString()))
+    .addingToSession((Application.SKEY_OF_ORDER_PRICE -> orderPrice))
+    .addingToSession((Application.SKEY_OF_TOTAL_PRICE -> orderPrice));
   }
   
   
@@ -234,6 +313,32 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
    * edit contact
    */
   def editContact = CPAction { implicit request =>
-    Ok(views.html.editContact());
+    
+    val contact : ContactForm = userCache.get[ContactForm](Application.CKEY_OF_CONTACT).getOrElse(ContactForm())    
+    Ok(views.html.editContact(contactForm.fill(contact)))
+  }
+  
+  /**
+   * submit contact
+   */
+  def submitContact = CPAction { implicit request =>
+  
+    contactForm.bindFromRequest().fold(
+      formWithErrors => {
+        Logger.error("contact validate error")
+        BadRequest(views.html.editContact(formWithErrors))
+      },
+      userData => {           
+        userCache.set(Application.CKEY_OF_CONTACT, userData)    
+        Redirect(routes.Application.confirmOrder)
+      }
+    )
+  }
+  
+  def confirmOrder = CPAction { implicit request =>
+    val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    val contact : ContactForm = userCache.get[ContactForm](Application.CKEY_OF_CONTACT).getOrElse(ContactForm())
+    
+    Ok(views.html.confirmOrder(allOrderItems.toList, contact));
   }
 }

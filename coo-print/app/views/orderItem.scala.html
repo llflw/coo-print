@@ -1,9 +1,10 @@
 @* orderItem Template File *@
-@(idx: Int, orderItem: OrderItem, materialList: List[Tables.MMaterialRow])
+@(orderItem: OrderItem, materialList: List[Tables.MMaterialRow])
 
+@defining(orderItem.fileName.substring(0, orderItem.fileName.indexOf("."))) { idx =>
         <div class="order-item" id="orderItem_@idx">
 
-            <input class="form-control" type="hidden" name="fileName" value="@{orderItem.fileName}">
+            <input class="form-control" type="hidden" name="fileNames[]" value="@{orderItem.fileName}">
             <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;" class="item-name">@{orderItem.fileName}</span>
             <button type="button" class="close delete-item" aria-label="Close" style="margin-right:10px;" data-toggle="modal" data-target="#delConfirmModal" data-file-name="@{orderItem.fileName}" data-order-item="orderItem_@idx"><span aria-hidden="true">&times;</span></button>
             </div></div></div>
@@ -20,7 +21,7 @@
             <tr><td style="width:30%;height:40px;"><span>数量</span>
             </td>
             <td>
-            <select class="form-control" id="item_quantity_@idx" name="item_quantity" >
+            <select class="form-control" id="item_quantity_@idx" name="@(idx).quantity" >
              @for(i <- 1 to 8){
              <option value="@i" @if(i == orderItem.quantity){
              selected
@@ -32,21 +33,21 @@
             <tr><td style="width:30%;height:40px;"><span>材料</span>
             </td>
             <td>
-           <select class="form-control" id="item_material_@idx" name="item_material">
-            @import play.api.Play.current
+           <select class="form-control" id="item_material_@idx" name="@(idx).material">
+
             @for(mr <- materialList ) {
-            <option value="@mr.materialId" data-price="@mr.price" data-name="@mr.materialName" @if(mr.materialName == orderItem.material){
+            <option value="@mr.materialId" data-price="@mr.price" data-name="@mr.materialName" @if(mr.materialId == orderItem.material){
              selected
              }>@mr.materialName ￥@mr.price</option>
             }
             </select>
             </td>
 
-@defining(materialList.filter(xmr => xmr.materialName == orderItem.material)(0)) {cMaterial =>            
+@defining(materialList.filter(xmr => xmr.materialId == orderItem.material)(0)) {cMaterial =>            
             <tr><td style="width:30%;height:40px;"><span>颜色</span>
             </td>
             <td>
-            <select class="form-control" id="item_color_@idx" name="item_color">
+            <select class="form-control" id="item_color_@idx" name="@(idx).color">
               @for(color <- cMaterial.vColor.getOrElse("").split(",")) {
                 <option @if(color == orderItem.color){
              selected
@@ -71,7 +72,7 @@
             <tr><td style="width:30%;height:40px;"><span>后处理</span>
             </td>
             <td>
-            <select class="form-control" id="item_finish_@idx" name="item_finish">
+            <select class="form-control" id="item_finish_@idx" name="@(idx).finish">
             @for(finish <- cMaterial.vFinish.getOrElse("").split(",")) {
                 <option @if(finish == orderItem.finish){
              selected
@@ -83,7 +84,7 @@
             <tr><td style="width:30%;height:40px;"><span>层厚</span>
             </td>
             <td>
-            <select class="form-control" id="item_layer_@idx" name="item_layer">
+            <select class="form-control" id="item_layer_@idx" name="@(idx).layer">
             @for(layer <- cMaterial.vLayer.getOrElse("").split(",")) {
                 <option @if(layer == orderItem.layer){
              selected
@@ -95,7 +96,7 @@
             <tr><td style="width:30%;height:40px;"><span>填充率</span>
             </td>
             <td>
-            <select class="form-control" id="item_fill_@idx" name="item_fill">
+            <select class="form-control" id="item_fill_@idx" name="@(idx).fill">
             @for(fill <- cMaterial.vFill.getOrElse("").split(",")) {
                 <option @if(fill == orderItem.fill){
              selected
@@ -107,7 +108,7 @@
             <tr><td style="width:30%;height:40px;"><span>尺寸缩放</span>
             </td>
             <td>
-            <select class="form-control" id="item_zoom_@idx" name="item_zoom">
+            <select class="form-control" id="item_zoom_@idx" name="@(idx).zoom">
             @for(zoom <- cMaterial.vZoom.getOrElse("").split(",")) {
                 <option @if(zoom == orderItem.zoom){
              selected
@@ -139,4 +140,4 @@
             <div class="row" ><div class="col-md-12" ><div class="shopping-line"></div></div></div>
             
             </div>
-  
+  }

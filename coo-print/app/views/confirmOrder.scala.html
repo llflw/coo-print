@@ -1,0 +1,43 @@
+@* confirmOrder Template File *@
+@import forms.ContactForm
+@(orderItems: List[OrderItem], contact: ContactForm)(implicit session: Session, flash: Flash)
+
+@shopping("confirmOrder") {
+
+<div class="confirm-order">
+
+  <p style='font-size:18px;'>请确认您的订单信息：</p>
+  <table style="width:100%">
+    <thead>
+      <tr><th>序号</th><th>模型名称</th><th>材料</th><th>颜色</th><th>后处理</th><th>数量</th><th>单价</th><th>小计</th></tr>
+    </thead>
+    <tbody>
+@for(i <- 0 to orderItems.length - 1) {
+@defining(orderItems(i)) { orderItem =>
+      <tr>
+	<td>@(i+1)</td>
+	<td>@orderItem.fileName</td>
+	<td>@orderItem.materialName</td>
+	<td>@orderItem.color</td>
+	<td>@orderItem.finish</td>
+	<td>@orderItem.quantity</td>
+	<td>￥@orderItem.materialPrice</td>
+	<td>￥@orderItem.price</td>
+	</tr>
+}
+}
+      <tfoot><tr>
+	<td colspan="4">上传更多</td>
+	<td colspan="1">共 @orderItems.length 件</td>
+	<td colspan="2">加工费用总计：￥@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0)</td>
+	</tr></tfoot>
+
+    </tbody>
+  </table>
+  <div class="shopping-line"></div>
+  <div class="shopping-line"></div>
+  <div class="shopping-line"></div>  
+</div>
+    
+    
+}

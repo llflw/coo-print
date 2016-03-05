@@ -1,9 +1,10 @@
 @* editContact Template File *@
-@()(implicit session: Session, flash: Flash)
+@import forms.ContactForm
+@(contact: Form[ContactForm])(implicit session: Session, flash: Flash)
 
 @shopping("contact") {
     <div class="edit-contact">
-   <form class="form-horizontal" data-toggle="validator">
+   <form class="form-horizontal" data-toggle="validator" role="form" id="contact_form" action="/s/submitContact" method="post">
 <div class="row">
 <div class="col-md-2 "><span style='font-size:18px;'>收件信息</span> </div>  
 <div class="col-md-10 ">
@@ -13,10 +14,10 @@
     
     <div class="col-sm-6">
     <div class="input-group">
-      <input type="text" class="form-control" id="addressee" name="addressee" placeholder="请输入收件人姓名" data-error="请输入收件人姓名" required>
+      <input type="text" value='@contact("addressee").value.get' class="form-control" id="addressee" name="addressee" placeholder="请输入收件人姓名" data-error="请输入收件人姓名" required>
       <div class="input-group-addon @if(session.get("user_name").isEmpty) {invisible}"><a href="#"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></a>  </div>
-      
     </div>
+    <div class="help-block with-errors"></div>
     </div>
     <div class="col-sm-4"><p style="text-align:right;font-size:16px;color:#ff8080;padding-top:3px;padding-right:20px;">标 * 为必填项</p> </div>
   </div>
@@ -24,15 +25,20 @@
   <div class="form-group">
     <label for="company" class="col-sm-2 control-label">收件单位</label>
     <div class="col-sm-8">
-      <input type="text" class="form-control" id="company" name="company" placeholder="请输入收件单位名称，可作为默认发票抬头">
+      <input type="text" value='@contact("company").value.get' class="form-control" id="company" name="company" placeholder="请输入收件单位名称，可作为默认发票抬头">
+      <div class="help-block with-errors"></div>
     </div>
   </div>  
 
   <div class="form-group">
     <label for="province" class="col-sm-2 control-label"><span class="error">* </span>省/市/区</label>
     <div class="col-sm-6">
-      <input type="text" class="form-control dropdown-toggle" id="province" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" name="province" placeholder="省/市/区" data-error="请输入省/市/区" required>
-	  <div class="dropdown-menu self-show" aria-labelledby="province" style="margin-left:15px;padding-left:15px;padding-right:15px;" id="dropdown-menu-x">
+<div style="position:relative;">
+      <input type="text" value='@(contact("province").value.get+contact("city").value.get+contact("district").value.get)' class="form-control dropdown-toggle" 
+	     id="province" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" placeholder="省/市/区" data-error="请输入省/市/区" autocomplete="off" required>
+      
+      <input type="hidden" name="province" value='@contact("province").value.get'><input type="hidden" name="city" value='@contact("city").value.get'><input type="hidden" name="district" value='@contact("district").value.get'>
+	  <div class="dropdown-menu self-show" aria-labelledby="province" style="padding-left:15px;padding-right:15px;" id="dropdown-menu-x">
             <ul id="myTabs" class="nav nav-tabs" role="tablist"> 
             <li role="presentation" class="active"><a href="#sel_province" id="province-tab" role="tab" data-toggle="tab" aria-controls="sel_province" aria-expanded="true">省</a></li> 
             <li role="presentation" class=""><a href="#sel_city" id="city-tab" role="tab"  data-toggle="tab" aria-controls="sel_city" aria-expanded="false">市</a></li> 
@@ -43,7 +49,9 @@
             <div role="tabpanel" class="tab-pane fade" id="sel_city" aria-labelledby="profile-tab"> <p>bbbb</p> </div> 
             <div role="tabpanel" class="tab-pane fade" id="sel_district" aria-labelledby="dropdown1-tab"> <p>cccc</p> </div> </div>
 	  </div>
-    </div>
+</div>	  
+      <div class="help-block with-errors"></div>
+   </div>
     
   </div>
   
@@ -51,7 +59,8 @@
   <div class="form-group">
     <label for="detail_address" class="col-sm-2 control-label"><span class="error">* </span>详细地址</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="detail_address" name="detail_address" placeholder="详细街道，请精确到门牌号，以便快递大哥准确投递" data-error="请输入详细地址" required>
+      <input type="text" value='@contact("address").value.get' class="form-control" id="detail_address" name="address" placeholder="详细街道，请精确到门牌号，以便快递大哥准确投递" data-error="请输入详细地址" required>
+      <div class="help-block with-errors"></div>
     </div>
     
   </div>  
@@ -59,7 +68,8 @@
   <div class="form-group">
     <label for="tel" class="col-sm-2 control-label"><span class="error">* </span>联系电话</label>
     <div class="col-sm-6">
-      <input type="tel" class="form-control" id="tel" name="tel" placeholder="请输入联系人的电话或手机号码" data-error="请输入电话或手机号码" required>
+      <input type="tel" value='@contact("tel").value.get' class="form-control" id="tel" name="tel" placeholder="请输入联系人的电话或手机号码" data-error="请输入电话或手机号码" required>
+      <div class="help-block with-errors"></div>
     </div>
     
   </div>
@@ -67,14 +77,19 @@
   <div class="form-group">
     <label for="email" class="col-sm-2 control-label"><span class="error">* </span>电子邮箱</label>
     <div class="col-sm-8">
-      <input type="email" class="form-control" id="email" name="email" placeholder="请输入联系人的常用邮箱，以便查询订单状态等信息" data-error="请输入常用邮箱" required>
-    </div>
+      <input type="email" value='@contact("email").value.get' class="form-control" id="email" name="email" placeholder="请输入联系人的常用邮箱，以便查询订单状态等信息" data-error="请输入常用邮箱" required>
+      <div class="help-block with-errors"></div>
+   </div>
    
   </div>
 
-
-
-
+  <div class="form-group">
+    <label for="email" class="col-sm-2 control-label">其他</label>
+    <div class="col-sm-10">
+      <input type="text" value='@contact("other").value.get' class="form-control" id="other" name="other" placeholder="请输入联系人的QQ、微信号等其他联系方式" >
+    </div>
+   
+  </div>
 </div>
 </div>
 
@@ -87,22 +102,26 @@
 <div class="row" style="margin-top:10px;">
 <div class="col-md-2 "><span style='font-size:18px;'>寄送方式</span> </div>  
 <div class="col-md-10 ">
-
+    <input type="hidden" name="post" id="post_method" value="sf1">
 <div class="row" style="padding-left:20px;">
-<div class="col-md-4">
+  <div class="col-md-4">
 <div class="dropup">
 <div class="radio">
   <label>
-    <input type="radio" name="post_mathod" id="post_mathod_sf" value="sf" checked><span>顺丰标快</span>  
-  </label>
+    <input type="radio" name="post_method" id="post_method_sf" 
+   @if(contact("post").value.get.startsWith("sf")) {
+      value='@contact("post").value.get' checked><span> @(Application.POSTMETHOD_SF.getOrElse(contact("post").value.get,"顺丰标快"))</span>
+    } else {
+      value="sf1"><span> 顺丰标快</span>
+    }
+  </abel>
   <a class="btn dropdown-toggle" type="button" id="dropdownMenu_post_sf" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
    <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
   </a>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu_post_sf">
-    <li><a href="#">顺丰标快</a></li>
-    <li><a href="#">顺丰特惠</a></li>
-    <li><a href="#">顺丰即日</a></li>
-    <li><a href="#">顺丰次晨</a></li>
+@for(sf <- Application.POSTMETHOD_SF) {
+    <li><a href="javascript:void(0);" data-post-method="@sf._1">@sf._2</a></li>
+}
   </ul>
 </div>
 </div>
@@ -110,19 +129,21 @@
 <div class="col-md-4">
   <div class="dropup">
     <div class="radio">
-
 	  <label>
-	    <input type="radio" name="post_mathod" id="post_mathod_other" value="other"><span>其他快递</span>
+	    <input type="radio" name="post_method" id="post_method_other" 
+		   @if(contact("post").value.get.startsWith("other")) {
+		      value='@contact("post").value.get' checked><span> @(Application.POSTMETHOD_OTHER.getOrElse(contact("post").value.get,"其他快递"))</span>
+		  } else {
+		      value="other1"><span> 其他快递</span>
+		  }
 	  </label>
-
 	  <a class="btn dropdown-toggle" type="button" id="dropdownMenu_post_other" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 	     <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
 	  </a>
-	  
 	  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_post_other">
-	    <li><a href="#">中通快递</a></li>
-	    <li><a href="#">圆通快递</a></li>
-	    <li><a href="#">申通快递</a></li>
+@for(o <- Application.POSTMETHOD_OTHER) {	    
+	    <li><a href="javascript:void(0);" data-post-method="@o._1">@o._2</a></li>
+}
 	  </ul>
   </div>
 </div>
@@ -130,7 +151,7 @@
 <div class="col-md-4">
 <div class="radio">
   <label>
-    <input type="radio" name="post_mathod" id="post_mathod_self" value="self">上门自取 
+    <input type="radio" name="post_method" id="post_method_self" value="self" @if(contact("post").value.get.startsWith("self")){checked} >上门自取 
   </label>
 </div>
 </div>
@@ -140,7 +161,8 @@
 <div class="col-md-12">
 <div class="checkbox">
   <label>
-    <input type="checkbox" value="">运费到付
+    <input type="checkbox" id="fc_control" onchange="$(this).siblings().val($(this).prop('checked'))" @if(contact("fc").value.get=="true"){checked}>运费到付
+    <input type="hidden" name="fc" value='@contact("fc").value.get'>
   </label>
 </div>
 </div>
@@ -151,3 +173,4 @@
 </form>
     </div>
 }
+

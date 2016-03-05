@@ -2,9 +2,9 @@
 @(orderItemList: List[OrderItem], materialList: List[Tables.MMaterialRow])(implicit session: Session, flash: Flash)
 
 @shopping("item") {
-<form id="order_items_form" method="post" action="/s/submitItems">
- @for(i <- 1 to orderItemList.length) {
-     @orderItem(i, orderItemList(i-1), materialList)
+<form id="item_form" method="post" action="/s/submitItems">
+ @for(oi <- orderItemList) {
+     @orderItem(oi, materialList)
  }
  </form>
  
