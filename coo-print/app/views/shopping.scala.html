@@ -37,9 +37,9 @@
 
         <div class="col-md-3" >
         <div style="background-color:#fff;margin-left:-15px;margin-right: -15px; padding-left:20px;padding-right:10px;">
-          <p style="padding-top: 40px;margin-bottom: 20px;"><img src='@routes.Assets.versioned("images/cart.png")'><span style='font-size: 24px;'> 您的购物车</span></p>
-          <table style="width:100%;font-size:18px;">
-            <tr><td style="height:60px;">3D打印 （<span class="order-count">@session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse(0)</span>件）</td>
+          <p style="font-size:24px;padding-top: 40px;margin-bottom: 20px;"><img src='@routes.Assets.versioned("images/cart.png")'>您的购物车</p>
+          <table style="font-size:18px;">
+            <tr><td style="height:60px;">3D打印 （<span class="object-count">@session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse(0)</span>件）</td>
             <td>￥<span class="order-price">@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0)</span></td></tr>
             <tr><td>后处理</td><td>免费</td></tr>
           </table>
@@ -51,7 +51,7 @@
           <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
           
             </div>
-            <button id="shopping-step-@step" type="submit" class='btn btn-primary btn-lg btn-lg-1 shopping-next-btn' form="@(step)_form" @if(session.get(Application.SKEY_OF_UPLOAD_FILE_COUNT).getOrElse("0").asInstanceOf[String].toInt <= 0){disabled}>下一步 >> </button>
+            <button id="shopping-step-@step" type="submit" class='btn btn-primary btn-lg btn-lg-1 shopping-next-btn' form="@(step)_form" @if(session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse("0").asInstanceOf[String].toInt <= 0){disabled}>下一步 >> </button>
         </div>
         </div>
       

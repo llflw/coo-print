@@ -24,10 +24,11 @@
 }
 
 .order-item {
-	background-color:#fff; 
-	margin-left:-10px;
-	margin-right:-10px;
-	font-size:15px;
+    background-color:#fff; 
+    margin-left:-10px;
+    margin-right:-10px;
+    font-size:15px;
+    color:#808080;
 }
 
 .edit-contact {
@@ -39,6 +40,7 @@
     padding-right:40px;
     padding-left:40px;
     padding-bottom:40px;
+    color:#808080;
 }
 
 .confirm-order {
@@ -50,8 +52,26 @@
     padding-right:40px;
     padding-left:40px;
     padding-bottom:40px;
+    color:#808080;
 }
 
+.confirm-order table {
+    margin-left:40px;
+    margin-top:20px;
+}
+.confirm-order th {
+    height:40px;
+    padding:5px;
+}
+.confirm-order tbody td {
+    padding:5px;
+}
+.confirm-order tfoot td {
+    padding-top:15px;
+}
+.confirm-order .contact-table td {
+    vertical-align:top;
+}
 
 
 .card-title {

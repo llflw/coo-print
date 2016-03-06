@@ -6,37 +6,62 @@
 
 <div class="confirm-order">
 
-  <p style='font-size:18px;'>请确认您的订单信息：</p>
-  <table style="width:100%">
+  <p><h4>请确认您的订单信息：</h4></p>
+  <table>
     <thead>
       <tr><th>序号</th><th>模型名称</th><th>材料</th><th>颜色</th><th>后处理</th><th>数量</th><th>单价</th><th>小计</th></tr>
     </thead>
+      <tfoot><tr>
+	<td colspan="4"></td>
+	<td colspan="2">共 @session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse(0) 件</td>
+	<td colspan="2">加工费用总计：￥@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0)</td>
+	</tr></tfoot>
     <tbody>
 @for(i <- 0 to orderItems.length - 1) {
 @defining(orderItems(i)) { orderItem =>
       <tr>
-	<td>@(i+1)</td>
+	<td>@(i+1).</td>
 	<td>@orderItem.fileName</td>
 	<td>@orderItem.materialName</td>
 	<td>@orderItem.color</td>
 	<td>@orderItem.finish</td>
 	<td>@orderItem.quantity</td>
-	<td>￥@orderItem.materialPrice</td>
-	<td>￥@orderItem.price</td>
+	<td>￥@("%.2f".format(orderItem.materialPrice))</td>
+	<td>￥@("%.2f".format(orderItem.price))</td>
 	</tr>
 }
 }
-      <tfoot><tr>
-	<td colspan="4">上传更多</td>
-	<td colspan="1">共 @orderItems.length 件</td>
-	<td colspan="2">加工费用总计：￥@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0)</td>
-	</tr></tfoot>
-
     </tbody>
   </table>
   <div class="shopping-line"></div>
+  <table class="contact-table"><tr>
+      <td>邮寄地址：
+      </td>
+      <td><p>XXX，XXXXXXXXXX公司</p>
+	<p>XX省-XX市-XX区，XXXXXX号，XXX室</p>
+	<p>158-****-****</p>
+      </td>
+     <td>
+	<p>寄送方式：顺丰标快</p>
+	<p>运费到付</p>
+	<p>运费小计：￥12<p>
+      </td>
+  </tr></table>
   <div class="shopping-line"></div>
-  <div class="shopping-line"></div>  
+  <table class="contact-table"><tr>
+      <td>发票信息：
+      </td>
+      <td><p>增值税普通发票</p>
+	<p>发票抬头： XXXXXXXXXX有限公司</p>
+	<p>发票内容：3D打印零部件</p>
+      </td>
+     <td style="vertical-align:bottom">
+	<p>税额：税率3%</p>
+	<p>税费小计：￥5.3<p>
+      </td>
+  </tr></table>
+  <div class="shopping-line"></div>
+  <h3 style="text-align:right">合计金额:￥195</h3>
 </div>
     
     

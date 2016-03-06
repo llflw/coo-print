@@ -6,6 +6,10 @@ body {
   padding-bottom: 40px;
 
 }
+table {
+    width:100%;
+}
+
 .site-wrapper {
   display: table;
   width: 100%;

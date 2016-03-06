@@ -34,11 +34,11 @@ import forms._
 
 object Application {
 
-  val SKEY_OF_UPLOAD_FILE_COUNT = "uploadFileCount"
-  val SKEY_OF_ORDER_PRICE = "orderPrice"
-  val SKEY_OF_TOTAL_PRICE = "totalPrice"
+  val SKEY_OF_OBJECT_COUNT = "object_count"
+  val SKEY_OF_ORDER_PRICE = "order_price"
+  val SKEY_OF_TOTAL_PRICE = "total_price"
   
-  val FKEY_OF_SHOPPING_NEXT_STEP = "shoppingNextStep"
+  val FKEY_OF_SHOPPING_NEXT_STEP = "shopping_next_step"
   
   val CKEY_OF_UPLOAD_FILES = "uploadFiles"
   val CKEY_OF_TABLE_MMATERIAL = "table_m_material"
@@ -120,9 +120,12 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       userCache.set[List[Tables.MMaterialRow]](Application.CKEY_OF_TABLE_MMATERIAL, materials).get
     }     
     
-    val orderItemList = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
-    
-    Ok(views.html.editItems(orderItemList.toList, cachedMaterials))
+    val orderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())
+    val orderPrice = "%.2f".format(orderItems.foldLeft(0.0)(_ + _.price))
+    Ok(views.html.editItems(orderItems.toList, cachedMaterials))
+      .addingToSession((Application.SKEY_OF_OBJECT_COUNT -> orderItems.length.toString()))
+      .addingToSession((Application.SKEY_OF_ORDER_PRICE -> orderPrice))
+      .addingToSession((Application.SKEY_OF_TOTAL_PRICE -> orderPrice))
   }
   
   def getItem(fileName : String) = CPAction { implicit request =>
@@ -216,9 +219,9 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
         { "files":[{"name":"$filename"}] }
         """)
       val orderPrice = "%.2f".format(allOrderItems.foldLeft(0.0)(_ + _.price))
-      
+      val objCnt = allOrderItems.foldLeft(0)(_ + _.quantity)
       Ok(json)
-      .addingToSession((Application.SKEY_OF_UPLOAD_FILE_COUNT -> allOrderItems.length.toString()))
+      .addingToSession((Application.SKEY_OF_OBJECT_COUNT -> objCnt.toString()))
       .addingToSession((Application.SKEY_OF_ORDER_PRICE -> orderPrice))
       .addingToSession((Application.SKEY_OF_TOTAL_PRICE -> orderPrice))
     }.getOrElse {
@@ -264,8 +267,9 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKEY_OF_UPLOAD_FILES).getOrElse(ListBuffer())-=(OrderItem(fileName))
     
     val orderPrice = "%.2f".format(allOrderItems.foldLeft(0.0)(_ + _.price))
+    val objCnt = allOrderItems.foldLeft(0)(_ + _.quantity)
     Ok("")
-    .addingToSession((Application.SKEY_OF_UPLOAD_FILE_COUNT -> allOrderItems.length.toString()))
+    .addingToSession((Application.SKEY_OF_OBJECT_COUNT -> objCnt.toString()))
     .addingToSession((Application.SKEY_OF_ORDER_PRICE -> orderPrice))
     .addingToSession((Application.SKEY_OF_TOTAL_PRICE -> orderPrice))
   }
@@ -301,9 +305,10 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     }
     
     val orderPrice = "%.2f".format(allOrderItems.foldLeft(0.0)(_ + _.price))
+    val objCnt = allOrderItems.foldLeft(0)(_ + _.quantity)
 
     Redirect(routes.Application.editContact)
-    .addingToSession((Application.SKEY_OF_UPLOAD_FILE_COUNT -> allOrderItems.length.toString()))
+    .addingToSession((Application.SKEY_OF_OBJECT_COUNT -> objCnt.toString()))
     .addingToSession((Application.SKEY_OF_ORDER_PRICE -> orderPrice))
     .addingToSession((Application.SKEY_OF_TOTAL_PRICE -> orderPrice));
   }

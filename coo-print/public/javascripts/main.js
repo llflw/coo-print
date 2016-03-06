@@ -34,19 +34,18 @@ $(function () {
                                 type:"GET",
                                 url:"/s/item/"+file.name,
                                 success:function(data2) {
-                                        var newItem = $(data2);
-                                        newItem.appendTo('#item_form');
-                                        
-                                var oic = Number($('.order-count').text()) + 1
-                                $('.order-count').text(oic);                            
-                                
-                                var orderPrice = 0;
-                                $('.item-total-price').each(function(idx, val){
+                                    var newItem = $(data2);
+                                    newItem.appendTo('#item_form');
+                                    
+                                    var oic = Number($('.object-count').text()) + Number(newItem.find('.item-quantity').text())
+                                    $('.object-count').text(oic);
+                                    
+                                    var orderPrice = 0;
+                                    $('.item-total-price').each(function(idx, val){
                                         orderPrice += Number($(val).text());
-                                });
-                                $('.order-price').text(orderPrice.toFixed(2));
-                                $('.total-price').text(orderPrice.toFixed(2));
-                                
+                                    });
+                                    $('.order-price').text(orderPrice.toFixed(2));
+                                    $('.total-price').text(orderPrice.toFixed(2));                                    
                                 }
                         });
                         $( this ).show();
@@ -172,6 +171,12 @@ $(function () {
         });
         $('.order-price').text(orderPrice.toFixed(2));
         $('.total-price').text(orderPrice.toFixed(2));
+
+	var objCnt = 0;
+        $('.item-quantity').each(function(idx, val){
+                objCnt += Number($(val).text());
+        });
+	$('.object-count').text(objCnt);
         
     });
     
@@ -192,7 +197,6 @@ $(function () {
     
     $('#delConfirmModal').on('show.bs.modal', function (event) {
         var target = $(event.relatedTarget)
-        var that = $(this);
         
         var orderItem = $('#'+target.data('order-item'));
         var fileName = target.data('file-name');
@@ -208,12 +212,12 @@ $(function () {
                         url:"/s/item/"+fileName,
                         success:function(data) {
                                 
-                                that.find('.btn-default').click();
+                                modal.find('.btn-default').click();
                         
-                        orderItem.hide('slow',function(){
+                            orderItem.hide('slow',function(){
                                 
-                                var oic = Number($('.order-count').text()) - 1
-                                $('.order-count').text(oic);
+                                var oic = Number($('.object-count').text()) - Number(orderItem.find('.item-quantity').text())
+                                $('.object-count').text(oic);
                                 if (oic <= 0) {
                                         $('#shopping-step-item').attr('disabled', true);
                                 }

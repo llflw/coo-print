@@ -9,14 +9,14 @@
             <button type="button" class="close delete-item" aria-label="Close" style="margin-right:10px;" data-toggle="modal" data-target="#delConfirmModal" data-file-name="@{orderItem.fileName}" data-order-item="orderItem_@idx"><span aria-hidden="true">&times;</span></button>
             </div></div></div>
              <div class="row">
-                <div class="col-md-8 ">【<span class="item-color">@(orderItem.color)</span><span class="item-material">@(orderItem.material)</span>打印（￥<span class="item-price">@(orderItem.price)</span>）+<span class="item-finish">@(orderItem.finish)</span>处理（免费）】   × <span class="item-quantity">@(orderItem.quantity)</span>件</div>
-                <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥<span class="item-total-price">@(orderItem.price)</span></div></div>
+                <div class="col-md-8 ">【<span class="item-color">@(orderItem.color)</span><span class="item-material">@(orderItem.material)</span>打印（￥<span class="item-price">@("%.2f".format(orderItem.price))</span>）+<span class="item-finish">@(orderItem.finish)</span>处理（免费）】   × <span class="item-quantity">@(orderItem.quantity)</span>件</div>
+                <div class="col-md-4" ><div style="text-align:right; padding-right:20px; font-size:18px;">小计：  ￥<span class="item-total-price">@("%.2f".format(orderItem.price))</span></div></div>
                 </div>
             
             <div class="row">
             <div class="col-md-6 ">
             
-            <table style="width:100%;margin-left:10px;">
+            <table style="margin-left:10px;">
             
             <tr><td style="width:30%;height:40px;"><span>数量</span>
             </td>
@@ -67,7 +67,7 @@
             <div class="col-md-6 "><span style="margin-left:10px;">高级设置 </span><a href="javascript:void(0);" onclick="$(this).parent().find('table').toggle(); $(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></a>
             
             
-            <table style="width:100%;margin-left:10px;display:none;margin-top:10px;">
+            <table style="margin-left:10px;display:none;margin-top:10px;">
             
             <tr><td style="width:30%;height:40px;"><span>后处理</span>
             </td>
@@ -121,12 +121,12 @@
             
             </div>
             <div class="col-md-6 ">
-            <table style="width:100%"><tr><td style="width:25%;height:60px;">实体体积</td>
+            <table><tr><td style="width:25%;height:60px;">实体体积</td>
             <td>17,766<span style="margin-left:10px">mm</span></td>
             <td><span style="">文件详情 </span><a href="javascript:void(0);" onclick="$('#t_volume_@idx').toggle();$(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td></tr>
             <tr><td></td><td colspan="2"><p>* 请确认零件体积是否正确。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td>
             </tr></table>
-            <table style="width:100%;display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">@{orderItem.mxyz}</td>
+            <table style="display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">@{orderItem.mxyz}</td>
             <td></td></tr>
             <tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：230 x 150 x 140 mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
             <tr><td>最小壁厚</td><td colspan="2">@(orderItem.mlayer)</td>
