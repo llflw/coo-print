@@ -40,9 +40,9 @@ object Application {
   
   val FKEY_OF_SHOPPING_NEXT_STEP = "shopping_next_step"
   
-  val CKEY_OF_UPLOAD_FILES = "uploadFiles"
+  val CKEY_OF_UPLOAD_FILES = "upload-files"
   val CKEY_OF_TABLE_MMATERIAL = "table_m_material"
-  val CKEY_OF_CONTACT= "contact"
+  val CKEY_OF_CONTACT= "order_contact"
   
   val POSTMETHOD_SF = Map("sf1" -> "顺丰标快","sf2" -> "顺丰特惠","sf3" -> "顺丰即日","sf4" -> "顺丰次晨")
   val POSTMETHOD_OTHER = Map("other1" -> "中通快递","other2" -> "圆通快递","other3" -> "申通快递")

@@ -181,21 +181,22 @@ trait Tables {
    *  @param orderPrice Database column order_price SqlType(numeric)
    *  @param orderStatus Database column order_status SqlType(varchar), Length(10,true)
    *  @param postMethod Database column post_method SqlType(varchar), Length(32,true)
+   *  @param freight Database column freight SqlType(numeric), Default(None)
    *  @param freightCollect Database column freight_collect SqlType(bool)
    *  @param payMethod Database column pay_method SqlType(varchar), Length(32,true)
    *  @param userMemo Database column user_memo SqlType(text), Default(None)
    *  @param operMemo Database column oper_memo SqlType(text), Default(None) */
-  case class POrderRow(orderId: String, orderDt: java.sql.Timestamp, userId: String, addressId: Int, orderPrice: scala.math.BigDecimal, orderStatus: String, postMethod: String, freightCollect: Boolean, payMethod: String, userMemo: Option[String] = None, operMemo: Option[String] = None)
+  case class POrderRow(orderId: String, orderDt: java.sql.Timestamp, userId: String, addressId: Int, orderPrice: scala.math.BigDecimal, orderStatus: String, postMethod: String, freight: Option[scala.math.BigDecimal] = None, freightCollect: Boolean, payMethod: String, userMemo: Option[String] = None, operMemo: Option[String] = None)
   /** GetResult implicit for fetching POrderRow objects using plain SQL queries */
-  implicit def GetResultPOrderRow(implicit e0: GR[String], e1: GR[java.sql.Timestamp], e2: GR[Int], e3: GR[scala.math.BigDecimal], e4: GR[Boolean], e5: GR[Option[String]]): GR[POrderRow] = GR{
+  implicit def GetResultPOrderRow(implicit e0: GR[String], e1: GR[java.sql.Timestamp], e2: GR[Int], e3: GR[scala.math.BigDecimal], e4: GR[Option[scala.math.BigDecimal]], e5: GR[Boolean], e6: GR[Option[String]]): GR[POrderRow] = GR{
     prs => import prs._
-    POrderRow.tupled((<<[String], <<[java.sql.Timestamp], <<[String], <<[Int], <<[scala.math.BigDecimal], <<[String], <<[String], <<[Boolean], <<[String], <<?[String], <<?[String]))
+    POrderRow.tupled((<<[String], <<[java.sql.Timestamp], <<[String], <<[Int], <<[scala.math.BigDecimal], <<[String], <<[String], <<?[scala.math.BigDecimal], <<[Boolean], <<[String], <<?[String], <<?[String]))
   }
   /** Table description of table p_order. Objects of this class serve as prototypes for rows in queries. */
   class POrder(_tableTag: Tag) extends Table[POrderRow](_tableTag, "p_order") {
-    def * = (orderId, orderDt, userId, addressId, orderPrice, orderStatus, postMethod, freightCollect, payMethod, userMemo, operMemo) <> (POrderRow.tupled, POrderRow.unapply)
+    def * = (orderId, orderDt, userId, addressId, orderPrice, orderStatus, postMethod, freight, freightCollect, payMethod, userMemo, operMemo) <> (POrderRow.tupled, POrderRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(orderId), Rep.Some(orderDt), Rep.Some(userId), Rep.Some(addressId), Rep.Some(orderPrice), Rep.Some(orderStatus), Rep.Some(postMethod), Rep.Some(freightCollect), Rep.Some(payMethod), userMemo, operMemo).shaped.<>({r=>import r._; _1.map(_=> POrderRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get, _9.get, _10, _11)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(orderId), Rep.Some(orderDt), Rep.Some(userId), Rep.Some(addressId), Rep.Some(orderPrice), Rep.Some(orderStatus), Rep.Some(postMethod), freight, Rep.Some(freightCollect), Rep.Some(payMethod), userMemo, operMemo).shaped.<>({r=>import r._; _1.map(_=> POrderRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8, _9.get, _10.get, _11, _12)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column order_id SqlType(varchar), PrimaryKey, Length(10,true) */
     val orderId: Rep[String] = column[String]("order_id", O.PrimaryKey, O.Length(10,varying=true))
@@ -211,6 +212,8 @@ trait Tables {
     val orderStatus: Rep[String] = column[String]("order_status", O.Length(10,varying=true))
     /** Database column post_method SqlType(varchar), Length(32,true) */
     val postMethod: Rep[String] = column[String]("post_method", O.Length(32,varying=true))
+    /** Database column freight SqlType(numeric), Default(None) */
+    val freight: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("freight", O.Default(None))
     /** Database column freight_collect SqlType(bool) */
     val freightCollect: Rep[Boolean] = column[Boolean]("freight_collect")
     /** Database column pay_method SqlType(varchar), Length(32,true) */

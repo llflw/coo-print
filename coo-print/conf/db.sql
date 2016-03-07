@@ -41,6 +41,7 @@ create table p_order
   order_price numeric not null,
   order_status character varying(10) not null,
   post_method character varying(32) not null,
+  freight numeric,
   freight_collect boolean not null,
   pay_method character varying(32) not null,
   user_memo text,

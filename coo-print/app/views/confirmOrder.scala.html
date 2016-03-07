@@ -37,31 +37,35 @@
   <table class="contact-table"><tr>
       <td>邮寄地址：
       </td>
-      <td><p>XXX，XXXXXXXXXX公司</p>
-	<p>XX省-XX市-XX区，XXXXXX号，XXX室</p>
-	<p>158-****-****</p>
+      <td><p>@contact.addressee，@contact.company</p>
+	<p>@contact.province-@contact.city-@contact.district，@contact.address</p>
+	<p>@contact.tel</p>
       </td>
      <td>
 	<p>寄送方式：顺丰标快</p>
+	@if(contact.fc) {
 	<p>运费到付</p>
-	<p>运费小计：￥12<p>
+	}
+	<p>运费小计：￥18<p>
       </td>
   </tr></table>
   <div class="shopping-line"></div>
+  @defining(session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0).asInstanceOf[String].toDouble) { totalPrice =>
   <table class="contact-table"><tr>
       <td>发票信息：
       </td>
       <td><p>增值税普通发票</p>
-	<p>发票抬头： XXXXXXXXXX有限公司</p>
+	<p>发票抬头： @contact.company</p>
 	<p>发票内容：3D打印零部件</p>
       </td>
      <td style="vertical-align:bottom">
 	<p>税额：税率3%</p>
-	<p>税费小计：￥5.3<p>
+	<p>税费小计：￥@("%.2f".format(totalPrice * 0.03))<p>
       </td>
   </tr></table>
   <div class="shopping-line"></div>
-  <h3 style="text-align:right">合计金额:￥195</h3>
+  <h3 style="text-align:right">合计金额:￥@("%.2f".format(totalPrice * 1.03))</h3>
+  }
 </div>
     
     
