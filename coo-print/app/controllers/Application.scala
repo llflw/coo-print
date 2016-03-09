@@ -348,4 +348,10 @@ import java.nio.file.Paths
     
     Ok(views.html.confirmOrder(allOrderItems.toList, contact));
   }
+  
+  
+  def home = CPAction{ implicit request =>
+    
+    Ok(views.html.home())
+  }  
 }

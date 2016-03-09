@@ -6,8 +6,8 @@ $(function () {
         limitConcurrentUploads: 1,
         sequentialUploads: true,
         add: function (e, data) {
-                $('#main_div').css('display', 'none');
-                $('#fileupload_div').css('display', 'initial');
+                $('#main_div').toggleClass('hidden');
+                $('#fileupload_div').toggleClass('hidden');
                 
                 data.context = $('<div class="progress"> \
                                 <div class="progress-bar progress-bar-success"> \
@@ -15,12 +15,7 @@ $(function () {
                                 <div class="progress-indicator"></div></div>').appendTo('#files');
                 data.submit();
         },
-	getFilesFromResponse: function (data) {
-                if (data.result && $.isArray(data.result.files)) {
-                    return data.result.files;
-                }
-                return [];
-        },
+
         done: function (e, data) {
         
                 var shoppingBtn = $('#gotoShoppingBtn');
@@ -29,7 +24,7 @@ $(function () {
                 } else {
                         $('#files').hide(1000,  function() {
                             $( this ).children().remove();
-			    var file = data.result.files[0];
+			            var file = data.result.files[0];
                         $.ajax({
                                 type:"GET",
                                 url:"/s/item/"+file.name,
@@ -96,7 +91,7 @@ $(function () {
         });
     
     $('select[name$=".material"]').change(function(event){
-        var parent = $(this).closest(".order-item");
+        var parent = $(this).closest(".edit-item");
         
         var mOpt = $(this).find('option:selected');
         parent.find('.item-material').text(mOpt.data('name'));
@@ -155,7 +150,7 @@ $(function () {
     
     $('select[name$=".quantity"]').change(function(event){
 
-        var parent = $(this).closest('.order-item');
+        var parent = $(this).closest('.edit-item');
         
         var cnt = $(this).find('option:selected').text();
         parent.find('.item-quantity').text(cnt);
@@ -183,14 +178,14 @@ $(function () {
     
     $('select[name$=".color"]').change(function(event){
 
-        var parent = $(this).closest('.order-item');    
+        var parent = $(this).closest('.edit-item');    
         parent.find('.item-color').text($(this).find('option:selected').text());
 
     });
     
     $('select[name$=".finish"]').change(function(event){
 
-        var parent = $(this).closest('.order-item');    
+        var parent = $(this).closest('.edit-item');    
         parent.find('.item-finish').text($(this).find('option:selected').text());
 
     });

@@ -25,3 +25,5 @@ POST    /s/submitContact              controllers.Application.submitContact
 
 
 GET    /s/confirmOrder                controllers.Application.confirmOrder
+
+GET    /home                          controllers.Application.home

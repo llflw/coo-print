@@ -1,20 +1,14 @@
-@****(message: String)
+@* home Template File *@
+@()(implicit session: Session, flash: Flash)
+@main{
+    <div class="container" style="padding-bottom:48px;margin-top:-10px;">
+    
+    <div class="row" style="margin-top:0px;">
 
-@main("Welcome to Play") {
+        <div class="col-md-9">
 
-    @play20.welcome(message)
-
-}******@
-@()(implicit session: Session)
-
-@main {
-      
-        <div class="site-wrapper">
-  <div class="site-wrapper-inner">
-  <div class="cover-container">
-
-<div class="jumbotron">
-<div class="container" id="main_div">
+<div class="main-panel">
+   <div id="main_div">
         <h1><span style="font-family:Segoe Script">CooPrint 3D</span><span style="font-family:STXingkai">打印服务</span></h1>
         <p>做靠谱的3D打印服务，成为您的专属打印机！</p>
         <p><span class="btn btn-primary btn-lg btn-lg-1 btn-lg-2 fileinput-button">
@@ -32,20 +26,20 @@
         </ul>
         </div>
     </div>
-    <div class="container hidden" id="fileupload_div">
+    <div id="fileupload_div" class="hidden">
     <!-- The container for the uploaded files -->
-
-   <h3 style="margin-bottom:40px;">文件上传中……</h3>
-
+    <h3 style="margin-bottom:40px;">文件上传中……</h3>
     <div id="files" class="files"></div>
-    <div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-md-4"></div>
-  <div class="col-md-4"><a id="gotoShoppingBtn" href="/s/editItems" class="btn btn-primary btn-lg btn-lg-1" style="visibility:hidden;">下一步 >></a></div>
-</div>
+    <div><a id="gotoShoppingBtn" href="/s/editItems" class="btn btn-primary btn-lg btn-lg-1" style="visibility:hidden;">下一步 >></a></div>
   </div>
-</div>
-
- </div></div></div>
-}
+  </div>
   
+  </div>
+        
+
+    @parts.right("")
+      
+      
+    </div>
+
+}

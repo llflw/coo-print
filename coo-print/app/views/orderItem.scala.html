@@ -2,7 +2,7 @@
 @(orderItem: OrderItem, materialList: List[Tables.MMaterialRow])
 
 @defining(orderItem.fileName.substring(0, orderItem.fileName.indexOf("."))) { idx =>
-        <div class="order-item" id="orderItem_@idx">
+        <div class="edit-item" id="orderItem_@idx">
 
             <input class="form-control" type="hidden" name="fileNames[]" value="@{orderItem.fileName}">
             <div class="row" ><div class="col-md-12" ><div class="shopping-line"><span style="margin-left:10px;font-size:18px;" class="item-name">@{orderItem.fileName}</span>
