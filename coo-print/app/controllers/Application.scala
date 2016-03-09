@@ -1,8 +1,9 @@
 package controllers
 
-
 import scala.concurrent.Future
+
 import javax.inject.Inject
+
 import play.api._
 import play.api.mvc._
 import play.twirl.api._
@@ -14,23 +15,21 @@ import play.api.data.format.Formats._
 import slick.driver.PostgresDriver.api._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
-
 import play.api.i18n.Messages
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.Logger
 import play.api.libs.json._
 import play.api.i18n.I18nSupport
 import play.api.i18n.MessagesApi
+
 import java.util.UUID
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.collection.mutable.ListBuffer
-
-import helpers._
+import utils.UserCache
 import models._
 import models.Tables._
-import forms._
 
 object Application {
 
@@ -90,6 +89,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   
   object CPAction extends ActionBuilder[Request] {
     def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
+
       import java.time.LocalDateTime
       Logger.info("Calling action:" + request.path + " - " + LocalDateTime.now())
       block(request).map { result => 
@@ -102,6 +102,7 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   
   val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+
   import dbConfig.driver.api._
   
   /**
@@ -188,10 +189,11 @@ class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   def upload = CPAction(parse.multipartFormData) {implicit request =>
   
     request.body.file("files[]").map { file =>
+
       import java.io.File
-      import java.nio.file.Path
-      import java.nio.file.Files
-      import java.nio.file.Paths
+import java.nio.file.Path
+import java.nio.file.Files
+import java.nio.file.Paths
       
       val uploadFileDir = Play.current.configuration.getString("cp.upload.dir").getOrElse("/tmp")
       

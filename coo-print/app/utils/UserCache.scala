@@ -1,4 +1,4 @@
-package helpers
+package utils
 
 import play.api.mvc.Request 
 import play.api.cache.CacheApi
