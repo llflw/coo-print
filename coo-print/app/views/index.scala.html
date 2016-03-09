@@ -9,43 +9,17 @@
 
 @main {
       
-        <div class="site-wrapper">
+<div class="site-wrapper">
   <div class="site-wrapper-inner">
-  <div class="cover-container">
-
-<div class="jumbotron">
-<div class="container" id="main_div">
-        <h1><span style="font-family:Segoe Script">CooPrint 3D</span><span style="font-family:STXingkai">打印服务</span></h1>
-        <p>做靠谱的3D打印服务，成为您的专属打印机！</p>
-        <p><span class="btn btn-primary btn-lg btn-lg-1 btn-lg-2 fileinput-button">
-        <i class="glyphicon glyphicon-upload" aria-hidden="true"></i>
-        <span> 上传您的3D设计文件</span>
-        <input id="fileupload" type="file" name="files[]" multiple></input></span></p>
-        <p>今日下单，预计4个工作日后将零件寄出！ </p>
-        <div style="width:500px;text-align:left;margin-left:auto;margin-right:auto;margin-top:90px;">
-        <ul>
-            <li>支持上传的文件格式：stl, obj, zip, step, stp, iges, igs, 3ds, wrl</li>
-            <li>文件大小不大于200M；上传超大文件，<a href="#">请联系我们</a></li>
-            <li>文件默认保存单位为毫米 (mm) 。</li>
-            <li>为了保证打印质量，建议设置STL文件的保存精度为0.01mm和1〫</li>
-            <li>如何保存STL文件？<a href="#">了解详情</a></li>
-        </ul>
-        </div>
+    <div class="cover-container">
+      <div class="jumbotron">
+	<div class="container" >
+	  @parts.upload()
+	</div>
+      </div>
     </div>
-    <div class="container hidden" id="fileupload_div">
-    <!-- The container for the uploaded files -->
-
-   <h3 style="margin-bottom:40px;">文件上传中……</h3>
-
-    <div id="files" class="files"></div>
-    <div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-md-4"></div>
-  <div class="col-md-4"><a id="gotoShoppingBtn" href="/s/editItems" class="btn btn-primary btn-lg btn-lg-1" style="visibility:hidden;">下一步 >></a></div>
-</div>
   </div>
 </div>
 
- </div></div></div>
 }
   
