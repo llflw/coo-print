@@ -1,6 +1,5 @@
 package utils;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
@@ -38,17 +37,10 @@ class STLStatus {
 	private final static Pattern p = Pattern.compile(regexFacet, Pattern.DOTALL);
 	
 	public STLStatus(String filePath) {
-		this.stlFilePath = filePath;
-		
-		try {
-			scan();
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		}
-		
+		this.stlFilePath = filePath;		
 	}
 	
-	private void scan() {
+	public boolean scan() {
 		try {
 			byte[] data = Files.readAllBytes(Paths.get(stlFilePath));
 			
@@ -59,7 +51,6 @@ class STLStatus {
 			String type = new String(Arrays.copyOf(data, 7));
 			if (type.trim().startsWith("solid")) {
 				// ASCII
-				System.out.println("ASCII");
 				String lines = new String(data);
 				
 				Matcher m = p.matcher(lines);
@@ -76,8 +67,6 @@ class STLStatus {
 
 			} else {
 				// Binary
-				System.out.println("Binary");
-				
 				ByteBuffer bb = ByteBuffer.wrap(data, 80, data.length - 80);
 				bb.order(ByteOrder.LITTLE_ENDIAN);
 				numOfTriangles = bb.getInt();
@@ -100,10 +89,12 @@ class STLStatus {
 			this.xLen = this.maxx - this.minx;
 			this.yLen = this.maxy - this.miny;
 			this.zLen = this.maxz - this.minz;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 		
+		return true;
 	}
 	
 	private double signedVolumeOfTriangle(Vertex v1, Vertex v2, Vertex v3) {
@@ -178,10 +169,12 @@ class STLStatus {
 	
 	public static void main(String[] args) {
 		STLStatus stl = new STLStatus("/var/nut-ascii.stl");
+		stl.scan();
 		System.out.println("  a volume = "+stl.getVolume()+" mm");
 		System.out.println("  numOfTriangles = "+stl.numOfTriangles);
 		System.out.println("  lwh = "+stl.getBox());
 		stl = new STLStatus("/var/40mmcube.stl");
+		stl.scan();
 		System.out.println("  b volume = "+stl.getVolume()+" mm");
 		System.out.println("  numOfTriangles = "+stl.numOfTriangles);
 		System.out.println("  lwh = "+stl.getBox());

@@ -45,7 +45,11 @@ object Application {
   
 }
 
-class Application @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, val messagesApi: MessagesApi, val cache: CacheApi) extends Controller with I18nSupport {
+class Application @Inject()(
+    protected val dbConfigProvider: DatabaseConfigProvider, 
+    val messagesApi: MessagesApi, 
+    val cache: CacheApi
+    ) extends Controller with I18nSupport {
 
   val userCache: UserCache = new UserCache(cache)
   
