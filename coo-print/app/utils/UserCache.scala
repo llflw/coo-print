@@ -2,20 +2,17 @@ package utils
 
 import play.api.mvc.Request 
 import play.api.cache.CacheApi
-import javax.inject.Inject
-import javax.inject.Singleton
 import scala.collection.mutable.Map
 
 object UserCache {
       
-  val SKEY_OF_CLIENT_ID = "c_id"
+  val SKeyClientId = "c_id"
 }
 
-@Singleton
 class UserCache (val cache: CacheApi) {
   
   def get[B](key : String)(implicit request : Request[_]) : Option[B] = {
-     val cidOpt = request.session.get(UserCache.SKEY_OF_CLIENT_ID)
+     val cidOpt = request.session.get(UserCache.SKeyClientId)
      if (!cidOpt.isEmpty) {
        val cid = cidOpt.get
        val userMap = cache.getOrElse(cid) {
@@ -31,7 +28,7 @@ class UserCache (val cache: CacheApi) {
   }
   
   def set[B](key : String, value : B)(implicit request : Request[_]) : Option[B] = {
-     val cidOpt = request.session.get(UserCache.SKEY_OF_CLIENT_ID)
+     val cidOpt = request.session.get(UserCache.SKeyClientId)
      if (!cidOpt.isEmpty) {
        val cid = cidOpt.get
        val userMap = cache.getOrElse(cid) {
@@ -49,7 +46,7 @@ class UserCache (val cache: CacheApi) {
   }
   
   def remove()(implicit request : Request[_]) : Unit = {
-    val cidOpt = request.session.get(UserCache.SKEY_OF_CLIENT_ID)
+    val cidOpt = request.session.get(UserCache.SKeyClientId)
      if (!cidOpt.isEmpty) {
        cache.remove(cidOpt.get)
      }

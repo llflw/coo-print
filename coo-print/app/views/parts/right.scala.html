@@ -5,10 +5,10 @@
 <div class="left-panel">
   <h2 style="font-size:24px;margin-bottom: 20px;"><img src='@routes.Assets.versioned("images/cart.png")'>您的购物车</h2>
   <div>
-@if(session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse("0").asInstanceOf[String].toInt > 0) {
+@if(session.get(Application.SKeyObjectCount).getOrElse("0").asInstanceOf[String].toInt > 0) {
   <table style="font-size:18px;">
-    <tr><td style="height:60px;">3D打印 （<span class="object-count">@session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse("0")</span>件）</td>
-    <td>￥<span class="order-price">@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse("0")</span></td></tr>
+    <tr><td style="height:60px;">3D打印 （<span class="object-count">@session.get(Application.SKeyObjectCount).getOrElse("0")</span>件）</td>
+    <td>￥<span class="order-price">@session.get(Application.SKeyOrderPrice).getOrElse("0")</span></td></tr>
     <tr><td>后处理</td><td>免费</td>
     <tr><td>后处理</td><td>免费</td>
     <tr><td>后处理</td><td>免费</td>       
@@ -18,7 +18,7 @@
   <p style="font-size:18px;">合计金额:</p>
   <p style="font-size:14px;margin-left: 40px;">（不含税费、运费）</p>
   <p style="font-size:24px;text-align: right;margin-top:20px;margin-bottom:20px;padding-right:20px;">
-                ￥<span class="total-price">@(session.get(Application.SKEY_OF_TOTAL_PRICE).getOrElse("0"))</span></p>
+                ￥<span class="total-price">@(session.get(Application.SKeyTotalPrice).getOrElse("0"))</span></p>
   <p style="font-size:16px;margin-left:20px;padding-bottom: 40px;">预计发货日期：2015/12/18</p>
 } else {
   <div class="shopping-line"></div>
@@ -40,7 +40,7 @@
 
     @if(step.length > 0) {
 <button id="shopping-step-@step" type="submit" class='btn btn-primary btn-lg btn-lg-1 shopping-next-btn' form="@(step)_form"
-	@if(session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse("0").asInstanceOf[String].toInt <= 0) {disabled}
+	@if(session.get(Application.SKeyObjectCount).getOrElse("0").asInstanceOf[String].toInt <= 0) {disabled}
 >下一步 >></button>
     }
 </div>

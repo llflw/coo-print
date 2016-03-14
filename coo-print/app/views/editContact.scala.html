@@ -110,7 +110,7 @@
   <label>
     <input type="radio" name="post_method" id="post_method_sf" 
    @if(contact("post").value.get.startsWith("sf")) {
-      value='@contact("post").value.get' checked><span> @(Application.POSTMETHOD_SF.getOrElse(contact("post").value.get,"顺丰标快"))</span>
+      value='@contact("post").value.get' checked><span> @(Application.PostMethodSF.getOrElse(contact("post").value.get,"顺丰标快"))</span>
     } else {
       value="sf1"><span> 顺丰标快</span>
     }
@@ -119,7 +119,7 @@
    <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
   </a>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu_post_sf">
-@for(sf <- Application.POSTMETHOD_SF) {
+@for(sf <- Application.PostMethodSF) {
     <li><a href="javascript:void(0);" data-post-method="@sf._1">@sf._2</a></li>
 }
   </ul>
@@ -132,7 +132,7 @@
 	  <label>
 	    <input type="radio" name="post_method" id="post_method_other" 
 		   @if(contact("post").value.get.startsWith("other")) {
-		      value='@contact("post").value.get' checked><span> @(Application.POSTMETHOD_OTHER.getOrElse(contact("post").value.get,"其他快递"))</span>
+		      value='@contact("post").value.get' checked><span> @(Application.PostMethodOther.getOrElse(contact("post").value.get,"其他快递"))</span>
 		  } else {
 		      value="other1"><span> 其他快递</span>
 		  }
@@ -141,7 +141,7 @@
 	     <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
 	  </a>
 	  <ul class="dropdown-menu" aria-labelledby="dropdownMenu_post_other">
-@for(o <- Application.POSTMETHOD_OTHER) {	    
+@for(o <- Application.PostMethodOther) {	    
 	    <li><a href="javascript:void(0);" data-post-method="@o._1">@o._2</a></li>
 }
 	  </ul>

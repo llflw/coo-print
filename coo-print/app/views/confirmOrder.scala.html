@@ -13,8 +13,8 @@
     </thead>
       <tfoot><tr>
 	<td colspan="4"></td>
-	<td colspan="2">共 @session.get(Application.SKEY_OF_OBJECT_COUNT).getOrElse(0) 件</td>
-	<td colspan="2">加工费用总计：￥@session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0)</td>
+	<td colspan="2">共 @session.get(Application.SKeyObjectCount).getOrElse(0) 件</td>
+	<td colspan="2">加工费用总计：￥@session.get(Application.SKeyOrderPrice).getOrElse(0)</td>
 	</tr></tfoot>
     <tbody>
 @for(i <- 0 to orderItems.length - 1) {
@@ -50,7 +50,7 @@
       </td>
   </tr></table>
   <div class="shopping-line"></div>
-  @defining(session.get(Application.SKEY_OF_ORDER_PRICE).getOrElse(0).asInstanceOf[String].toDouble) { totalPrice =>
+  @defining(session.get(Application.SKeyOrderPrice).getOrElse(0).asInstanceOf[String].toDouble) { totalPrice =>
   <table class="contact-table"><tr>
       <td>发票信息：
       </td>
