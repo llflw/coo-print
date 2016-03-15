@@ -27,6 +27,7 @@ import utils.UserCache
 import models._
 import models.Tables._
 import utils.DBUtils
+import utils.StlParser
 
 object Application {
 
@@ -205,8 +206,20 @@ class Application @Inject()(
         Files.createDirectory(pdir);
       }
       var filename = file.filename
-      if (filename.indexOf(".") < 0) filename = filename + ".stl"
+      if (filename.indexOf(".") < 0) filename += ".stl"
       //val contentType = file.contentType
+      val destFile = pdir.resolve(filename)      
+      file.ref.moveTo(destFile.toFile())   
+      
+      val orderItem = OrderItem(filename)
+      // stl file parser
+      val stlParser = new StlParser(destFile)
+      if (stlParser.parse()) {
+        orderItem.volume = stlParser.getVolume;
+        orderItem.xLen = stlParser.getXLen;
+        orderItem.yLen = stlParser.getYLen;
+        orderItem.zLen = stlParser.getZLen;
+      }
       
       val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKeyUploadFiles)
                           .getOrElse(userCache.set[ListBuffer[OrderItem]](Application.CKeyUploadFiles, ListBuffer.empty).get)
@@ -215,9 +228,8 @@ class Application @Inject()(
         val idx = filename.indexOf(".")
         filename = filename.substring(0, idx) + "-" + allOrderItems.length.toString() + filename.substring(idx, filename.length)
       }
-      allOrderItems += (OrderItem(filename))
-
-      file.ref.moveTo(pdir.resolve(filename).toFile())
+      allOrderItems.append(orderItem)
+      
       val json = Json.parse(s"""
         { "files":[{"name":"$filename"}] }
         """)

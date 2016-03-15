@@ -42,8 +42,10 @@ case class OrderItem(
     var zoom: String,
     var materialPrice: Double,
     var price: Double,
-    val mxyz: String,
-    val volumn: Double,
+    var xLen: Float,
+    var yLen: Float,
+    var zLen: Float,
+    var volume: Double,
     val mlayer: Double) {
   def ==(oi : OrderItem) = oi.fileName == this.fileName
   
@@ -67,5 +69,5 @@ case class OrderItem(
 }
 
 object OrderItem {
-  def apply(fileName: String) : OrderItem = OrderItem(fileName, 1, 1, "PLA塑料", "原色", "无", "0.3", "15", "100", 100.1, 100.1, "230 x 150 x 140 mm", 1.0, 2)
+  def apply(fileName: String) : OrderItem = OrderItem(fileName, 1, 1, "PLA塑料", "原色", "无", "0.3", "15", "100", 100.1, 100.1, 1.0f, 1.0f, 1.0f, 1.0, 2)
 }
