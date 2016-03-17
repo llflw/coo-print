@@ -12,21 +12,21 @@ public class JApplication extends Controller {
 
 	public Result obj(String fileName) {
 		try {
-		Path  p = Paths.get("/var/obj_3d",fileName);
+		Path  p = Paths.get("/Users/lix",fileName);
 	
-		if(fileName.endsWith(".jpg") || fileName.endsWith(".stl")) {
-			
+//		if(fileName.endsWith(".jpg") || fileName.endsWith(".stl")) {
+//			
 			return ok(Files.readAllBytes(p));
-		} else {
-			String str = "";
-			for (String line : Files.readAllLines(p)) {
-				str += line + "\n";
-			}
-			
-			Result r = ok(str);
-			return r;
-		}
-		
+//		} else {
+//			String str = "";
+//			for (String line : Files.readAllLines(p)) {
+//				str += line + "\n";
+//			}
+//			
+//			Result r = ok(str);
+//			return r;
+//		}
+//		
 		}catch (Exception e ) {
 			return ok();
 		}

@@ -208,6 +208,15 @@ class Application @Inject()(
       var filename = file.filename
       if (filename.indexOf(".") < 0) filename += ".stl"
       //val contentType = file.contentType
+
+      
+      val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKeyUploadFiles)
+                          .getOrElse(userCache.set[ListBuffer[OrderItem]](Application.CKeyUploadFiles, ListBuffer.empty).get)
+                      
+      if (allOrderItems.filter { x => x.fileName == filename }.length > 0 ) {
+        val idx = filename.indexOf(".")
+        filename = filename.substring(0, idx) + "-" + allOrderItems.length.toString() + filename.substring(idx, filename.length)
+      }
       val destFile = pdir.resolve(filename)      
       file.ref.moveTo(destFile.toFile())   
       
@@ -219,14 +228,6 @@ class Application @Inject()(
         orderItem.xLen = stlParser.getXLen;
         orderItem.yLen = stlParser.getYLen;
         orderItem.zLen = stlParser.getZLen;
-      }
-      
-      val allOrderItems = userCache.get[ListBuffer[OrderItem]](Application.CKeyUploadFiles)
-                          .getOrElse(userCache.set[ListBuffer[OrderItem]](Application.CKeyUploadFiles, ListBuffer.empty).get)
-                      
-      if (allOrderItems.filter { x => x.fileName == filename }.length > 0 ) {
-        val idx = filename.indexOf(".")
-        filename = filename.substring(0, idx) + "-" + allOrderItems.length.toString() + filename.substring(idx, filename.length)
       }
       allOrderItems.append(orderItem)
       

@@ -66,6 +66,10 @@ case class OrderItem(
     this
   }
   
+  def box = {
+    "%.2f x %.2f x %.2f".format(xLen,yLen,zLen) 
+  }
+  
 }
 
 object OrderItem {

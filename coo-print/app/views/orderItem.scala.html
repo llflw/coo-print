@@ -59,7 +59,13 @@
             </table>
       
             </div> 
-            <div class="col-md-6 "><img src='@routes.Assets.versioned("images/s.png")' style="display:block;margin-left:auto;margin-right:auto;"></div> 
+            <div class="col-md-6 ">
+           
+                <div class="canvasio3D show-3d-obj">
+      <div data-parameter="{'loadingtext':'Loading...','backimg':'...','reflection':'off','refval':'0','floor':'off','floorheight':'42','objpath':'/obj/nut-ascii.stl','texturpath':'','envtexturpath':'','objcol':'#ffffff','objcolor':'#ffffff','objscale':'1','objshadow':'on','width':'180','height':'120','dropshadow':'2','zoom':'50','textcol':'#000000','border':'1','bordercol':'#ffffff','backcol':'#ffffff','text':'','rollspeedx':'0','rollspeedy':'0','rollspeedh':'0','rollspeedv':'0','rollmode':'off','mouse':'on','lightset':'7','lightrotate':'off','shine':'0','ambient':'#ffffff','fps':'','wincount':'0','_uploadUrl':'','_picUrl':'','lang':'en_US','help':'off','winCount':0}" id="3D_1" style="cursor: move;">
+      </div>
+    </div>
+            </div> 
             </div>
             
             
@@ -122,11 +128,11 @@
             </div>
             <div class="col-md-6 ">
             <table><tr><td style="width:25%;height:60px;">实体体积</td>
-            <td>17,766<span style="margin-left:10px">mm</span></td>
+            <td>@{"%.2f".format(orderItem.volume)}<span style="margin-left:10px">mm</span></td>
             <td><span style="">文件详情 </span><a href="javascript:void(0);" onclick="$('#t_volume_@idx').toggle();$(this).find('.glyphicon').toggleClass('glyphicon-minus');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td></tr>
             <tr><td></td><td colspan="2"><p>* 请确认零件体积是否正确。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td>
             </tr></table>
-            <table style="display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">@{orderItem.mxyz}</td>
+            <table style="display:none;" id="t_volume_@idx"><tr><td style="width:25%;height:60px;">最大尺寸</td><td style="width:50%;">@{orderItem.box} mm </td>
             <td></td></tr>
             <tr><td></td><td colspan="2"><p>* 支持最大三维尺寸为：230 x 150 x 140 mm。</p><div class="error"><p>* 请确认零件体积是否正确。</p><p>* 请确认零件体积是否正确。</p></div></td></tr>
             <tr><td>最小壁厚</td><td colspan="2">@(orderItem.mlayer)</td>

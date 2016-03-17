@@ -58,17 +58,20 @@
 
 
 .show-3d-obj {
-	background-color:#F6F6F6;
+	background-color:#FFFFFF;
 	color:#000000;
-	border:1px solid;
+/*	border:1px solid;
 	border-color:#f6f6f6;
-	width:280px;
-	height:280px;
-	overflow: hidden;
-	-moz-box-shadow: 0 0 2px #888; 
+	*/	
+	width:180px;
+	height:120px;
+	overflow: hidden;	
+/*	-moz-box-shadow: 0 0 2px #888; 
 	-webkit-box-shadow: 0 0 2px#888; 
 	box-shadow: 0 0 2px #888;
+	*/
 	padding:0px;
+	margin:auto;
 }
 
 .confirm-order table {
